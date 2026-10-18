@@ -17,10 +17,9 @@ template, critic draw, checks, output folder. This file owns the order.
   one round.
 - The ask may carry a deadline ("I need it before Tuesday 8am"). Name
   what you will do less of to honor it — fewer questions, a tighter
-  scope, a shorter artifact — and say the educator can move the
-  deadline instead if they would rather; the critic volley and the
-  checks always run. Once drafting starts, a usable draft exists at
-  any interruption.
+  scope, a shorter artifact — and say the educator can move the deadline
+  instead if they would rather; the critic volley and the checks always
+  run. Once drafting starts, a usable draft exists at any interruption.
 
 ## 2. Gather
 
