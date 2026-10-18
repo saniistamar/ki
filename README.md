@@ -14,24 +14,26 @@ anything can be recovered. You never read or run any of the machinery.
    in ZCode.
 2. Paste this into the chat:
 
-   > Install Ki into this folder. Ki is distributed at
-   > https://github.com/saniistamar/ki. Do this:
-   >
-   > 1. Download the zip from
-   >    https://github.com/saniistamar/ki/releases/latest/download/ki.zip
-   >    to a temporary place outside this folder.
-   > 2. List the zip's contents. Before unpacking, check this folder:
-   >    stop and ask me if any file or folder here would collide with
-   >    them, or if this folder already holds a `.git` folder or a
-   >    `courses/` folder. Once I open the right folder, I will paste
-   >    this again.
-   > 3. Unpack the zip into this folder, flat — its contents land here,
-   >    not in a subfolder. Delete the downloaded zip afterwards.
-   > 4. Read AGENTS.md in this folder and follow its "First run"
-   >    section: greet me briefly and ask me the intake questions in
-   >    one round.
-   >
-   > Speak to me in plain words. Never show me the machinery.
+   ```text
+   Install Ki into this folder. Ki is distributed at
+   https://github.com/saniistamar/ki. Do this:
+
+   1. Download the zip from
+      https://github.com/saniistamar/ki/releases/latest/download/ki.zip
+      to a temporary place outside this folder.
+   2. List the zip's contents. Before unpacking, check this folder:
+      stop and ask me if any file or folder here would collide with
+      them, or if this folder already holds a `.git` folder or a
+      `courses/` folder. Once I open the right folder, I will paste
+      this again.
+   3. Unpack the zip into this folder, flat — its contents land here,
+      not in a subfolder. Delete the downloaded zip afterwards.
+   4. Read AGENTS.md in this folder and follow its "First run"
+      section: greet me briefly and ask me the intake questions in
+      one round.
+
+   Speak to me in plain words. Never show me the machinery.
+   ```
 
 3. Answer the questions. That is the whole install.
 
@@ -48,11 +50,14 @@ anything can be recovered. You never read or run any of the machinery.
 
 Ask "update Ki" in ZCode whenever you like. The assistant checks for a
 newer release, updates the machinery, and leaves every course,
-material, and note you own untouched. Each update is saved to the
-folder's history, so you can always ask for an earlier state back. If
-your copy of the folder was made without its hidden files, updates
-still work, but nothing can be recovered — the assistant will say so
-plainly.
+material, and note you own untouched. Your own work lives in your
+course folders — profiles, artifacts, materials, judgment-call notes —
+and updates never touch it. The machinery (the reference course,
+templates, and guides) is replaced on update: keep nothing of yours
+inside it. Each update is saved to the folder's history, so you can
+always ask for an earlier state back. If your copy of the folder was
+made without its hidden files, updates still work, but nothing can be
+recovered — the assistant will say so plainly.
 
 ## Development
 
@@ -67,7 +72,7 @@ lives at `src/` in this repo. The release zip is cut from the tracked
   attaches the zip as `ki.zip`. The manual fallback (the version comes
   from `src/KI-VERSION`, so the tag cannot disagree):
 
-  `v="$(tr -d '[:space:]' < src/KI-VERSION)" && bash scripts/build.sh && cp "dist/ki-$v.zip" dist/ki.zip && gh release create "v$v" dist/ki.zip`
+  `v="$(tr -d '[:space:]' < src/KI-VERSION)" && bash scripts/build.sh && cp "dist/ki-$v.zip" dist/ki.zip && gh release create "v$v" --notes "Ki v$v — the teaching workspace system. See the README for install and update." dist/ki.zip`
 
 - Tags are immutable. A defect after a release lands as the next
   version.

@@ -43,11 +43,13 @@ reference example and may be deleted).
 
 When the educator asks to update Ki ("update Ki", "is there a newer Ki"):
 
-1. Read `KI-VERSION` in this folder. Resolve the newest `v*` tag with
+1. Read `KI-VERSION` in this folder. Resolve the newest release tag with
    `git ls-remote --tags --refs --sort=-version:refname
    https://github.com/saniistamar/ki.git 'v*'` — the first tag in the
-   list. When git is unavailable in this environment, read the GitHub
-   releases page and use the zip door below.
+   list. Ignore tags with a suffix after the version (`-rc`, `-beta`):
+   only plain `vX.Y.Z` tags count. When git is unavailable in this
+   environment, read the GitHub releases page and use the zip door
+   below.
 2. Compare versions by their dot-separated numbers, never as words:
    `0.10.0` is newer than `0.9.0`. When no tag is newer than
    `KI-VERSION`, say so in plain words and stop. Applying an older
@@ -56,35 +58,45 @@ When the educator asks to update Ki ("update Ki", "is there a newer Ki"):
    `git clone --depth 1 --branch <tag>
    https://github.com/saniistamar/ki.git <temp-dir>`. The clone's
    `src/KI-VERSION` is the version this update carries.
-4. Overlay the clone's `src/` onto this folder, additively. For every
-   file at `src/<path>` in the clone, copy it to `<path>` in this
-   folder — `KI-VERSION` included. Never write any path that is not in
-   the clone's `src/`. When `courses/example-course/` is absent here,
-   skip it entirely: a deleted reference course never comes back.
-   When the installed `.gitignore` carries lines beyond the release's
-   own, carry the extra lines over: append them to the new file, then
-   write it. Delete nothing — with one exception: when the release
-   carries a `src/KI-REMOVED` manifest, one system path per line,
-   delete exactly those paths here, never an educator-owned one.
-5. Commit silently: stage exactly the files step 4 copied — never
-   `git add -A`, never the educator's uncommitted work — as
-   `ki: update to v<version>`. Tell the educator in plain words that
-   the folder's history holds the earlier state, so they can ask for
-   it back.
+4. Before copying, read the installed `.gitignore` and note its lines
+   beyond the release's own. Then overlay the clone's `src/` onto this
+   folder, additively. For every file at `src/<path>` in the clone,
+   copy it to `<path>` in this folder — `KI-VERSION` included. Never
+   write any path that is not in the clone's `src/`. When
+   `courses/example-course/` is absent here, skip it entirely: a
+   deleted reference course never comes back on its own. After
+   copying, append the noted `.gitignore` lines to the new file.
+   Delete nothing, with one exception: when the release carries a
+   `src/KI-REMOVED` manifest — one system path per line, cumulative
+   across releases — delete exactly those paths here. Before deleting
+   a manifest path, check it against the educator's own work (the
+   ownership rule below): an educator-owned path is never deleted;
+   report it plainly instead.
+5. Commit silently: stage exactly the changed system paths — the
+   files step 4 copied and the paths it removed — never `git add -A`,
+   never the educator's uncommitted work — as `ki: update to
+   v<version>`. Tell the educator in plain words that the folder's
+   history holds the earlier state, so they can ask for it back.
 6. Delete the temporary clone.
 
 When a step fails partway, stop and say plainly. The overlay is safe
 to retry: re-running the same update completes it.
 
 When this folder has no git history — no `.git`, or git unavailable in
-this environment — use the zip door: download
-`https://github.com/saniistamar/ki/releases/latest/download/ki.zip` to
-a system temporary folder, check the version it carries against
-`KI-VERSION` (not newer: say so and ask), then unpack it over this
-folder with the same additive rules — `unzip -o <zip> -x
-'courses/example-course/*'` when `courses/example-course/` is absent
-here, so a deleted reference course never comes back. Say plainly that
-no history was kept for this workspace, so nothing can be recovered.
+this environment — use the zip door, and say plainly that no history
+was kept for this workspace, so nothing can be recovered:
+
+1. Download
+   `https://github.com/saniistamar/ki/releases/latest/download/ki.zip`
+   to a system temporary folder. Check the version it carries against
+   `KI-VERSION`: not newer, say so and ask.
+2. Note the installed `.gitignore`'s lines beyond the release's own.
+3. Unpack over this folder, additively — `unzip -o <zip> -x
+   'courses/example-course/*'` when `courses/example-course/` is
+   absent here, so a deleted reference course never comes back.
+4. Append the noted `.gitignore` lines to the new file.
+5. When the release carries `KI-REMOVED`, delete exactly those paths,
+   with the same educator-owned check as the git door.
 
 The educator's own work is untouchable: everything under
 `courses/<course>/` for every course except `example-course` — profiles,

@@ -18,7 +18,11 @@ any of the machinery: just ask in plain words.
 
 From time to time, just ask: "update Ki". The assistant checks whether a
 newer Ki exists, updates the folder's machinery, and leaves your
-courses, materials, and notes untouched. Every update is recorded in
+courses, materials, and notes untouched. Your own work lives in your
+course folders — profiles, artifacts, materials, judgment-call notes —
+and updates never touch it. The machinery (the reference course,
+templates, and guides) is replaced on update: keep nothing of yours
+inside it. Every update is recorded in
 the folder's history, so you can always ask for the earlier state of
 anything back. You never need to know how any of this works.
 
@@ -53,5 +57,6 @@ recovered — the assistant will say so plainly.
   builds from what is there.
 - `courses/example-course/` is a filled-in example you can browse or
   delete. Treat it as a read-only reference: updates replace it, so
-  keep nothing of yours inside it. `library/` is reserved for a future
+  keep nothing of yours inside it. If you delete it and want it back
+  later, just ask. `library/` is reserved for a future
   deep-research feature.

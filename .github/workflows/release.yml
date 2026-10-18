@@ -28,5 +28,7 @@ jobs:
         run: |
           version="$(tr -d '[:space:]' < src/KI-VERSION)"
           cp "dist/ki-$version.zip" dist/ki.zip
-          gh release create "${{ github.ref_name }}" --generate-notes dist/ki.zip \
+          gh release create "${{ github.ref_name }}" \
+            --notes "Ki v$version — the teaching workspace system. See the README for install and update." \
+            dist/ki.zip \
             || gh release upload "${{ github.ref_name }}" dist/ki.zip --clobber
