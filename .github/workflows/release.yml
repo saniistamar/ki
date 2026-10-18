@@ -1,0 +1,23 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the release zip
+        run: bash scripts/build.sh
+      - name: Attach the zip as ki.zip
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cp "dist/ki-$(cat src/KI-VERSION).zip" dist/ki.zip
+          gh release create "${{ github.ref_name }}" --generate-notes dist/ki.zip

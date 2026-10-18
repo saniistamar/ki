@@ -1,0 +1,68 @@
+# Ki
+
+Ki turns a folder into a teaching workspace. You ask in plain words —
+"set up a course called Intro Statistics", "create a quiz for week 4 on
+confidence intervals" — and an AI assistant (ZCode) writes the quiz,
+assignment, handout, worksheet, or case study into the folder. Every
+draft is reviewed by independent reviewers and checked before it is
+marked done. The folder keeps its own history, so an earlier version of
+anything can be recovered. You never read or run any of the machinery.
+
+## Install with one paste
+
+1. Create a new, empty folder for your teaching workspace and open it
+   in ZCode.
+2. Paste this into the chat:
+
+   > Install Ki into this folder. Ki is distributed at
+   > https://github.com/saniistamar/ki. Do this:
+   >
+   > 1. Download the zip from
+   >    https://github.com/saniistamar/ki/releases/latest/download/ki.zip
+   > 2. List the zip's contents. If any file or folder already in this
+   >    folder would collide with them, stop and ask me which folder to
+   >    use instead.
+   > 3. Unpack the zip into this folder, flat — its contents land here,
+   >    not in a subfolder.
+   > 4. Read AGENTS.md in this folder and follow its "First run"
+   >    section: greet me briefly and ask me the intake questions in
+   >    one round.
+   >
+   > Speak to me in plain words. Never show me the machinery.
+
+3. Answer the questions. That is the whole install.
+
+## Install manually
+
+1. Download the zip from the
+   [latest release](https://github.com/saniistamar/ki/releases/latest).
+2. Unzip it into a new, empty folder.
+3. Open the folder in ZCode and say "set up a course" — the intake
+   starts on its own.
+
+## Keeping Ki current
+
+Ask "update Ki" in ZCode whenever you like. The assistant checks for a
+newer release, updates the machinery, and leaves every course,
+material, and note you own untouched. Each update is saved to the
+folder's history, so you can always ask for an earlier state back.
+
+## Development
+
+Ki is agent-docs all the way down: one `AGENTS.md` constitution, a
+small skill set, templates, and a check script. The installed system
+lives at `src/` in this repo. The release zip is cut from the tracked
+`src/` tree and unpacks flat.
+
+- Build the zip: `bash scripts/build.sh`. The version comes from
+  `src/KI-VERSION`. The script writes `dist/ki-<version>.zip`.
+- Cut a release: push a tag `v<version>`; the workflow builds and
+  attaches the zip as `ki.zip`. The manual fallback:
+
+  `bash scripts/build.sh && cp dist/ki-$(cat src/KI-VERSION).zip dist/ki.zip && gh release create v<version> dist/ki.zip`
+
+- Tags are immutable. A defect after a release lands as the next
+  version.
+- Upgrades are additive: nothing is deleted in an educator's folder,
+  and every educator-owned path is preserved by rule.
+- License: MIT. See [LICENSE](./LICENSE).
