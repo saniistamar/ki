@@ -40,8 +40,8 @@ reference example and may be deleted).
    `git config user.name "<Educator Name>"`,
    `git config user.email "<educator-name>@ki.local"`.
    Commit everything as the workspace's first commit.
-5. Offer the first artifact: "Want to make a first quiz now, to see how
-   this works?" The offer is a question, never forced.
+5. Offer the first artifact: "Want to make a first quiz now,
+   to see how this works?" The offer is a question, never forced.
 6. If git is unavailable, say so once, plainly, and continue without it;
    versioning is then declared absent for this workspace.
 

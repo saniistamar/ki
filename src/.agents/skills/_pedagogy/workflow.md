@@ -78,7 +78,7 @@ template, critic draw, checks, output folder. This file owns the order.
   which outcomes it serves, what the reviewers said, what was checked
   (named honestly — real checks or "manual checks"), what needs their eye
   (dates, points), and any parked findings.
-- Offer the sibling format when one fits: "this quiz can become a
-  worksheet — say the word."
+- Offer the sibling format when one fits: "this quiz can become a worksheet —
+  say the word."
 - End with a "Next moves:" line — the plain-words follow-ups (harder,
   shorter, next week).
