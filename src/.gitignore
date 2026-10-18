@@ -1,2 +1,3 @@
 .work/*
 !.work/README.md
+__pycache__/

@@ -26,8 +26,10 @@ reference example and may be deleted).
    prerequisites, class size, what students should be able to do by the
    end, term length and meeting pattern, how learning is measured
    (assessment weights — planning only, Ki does not grade), tone, and
-   policies (late work, collaboration, AI use, accessibility). A field the
-   educator shrugs off takes the stated default, as a ruling.
+   policies (late work, collaboration, AI use, accessibility). Ask also
+   for the educator's name: it labels this folder's history and stays in
+   this folder. A field the educator shrugs off takes the stated
+   default, as a ruling.
 3. Write `courses/<slug>/course-profile.md` from `templates/course-profile.md`.
 4. Initialize version control silently: `git init`, then a repo-local
    identity from the educator's name:
@@ -42,30 +44,36 @@ reference example and may be deleted).
 When the educator asks to update Ki ("update Ki", "is there a newer Ki"):
 
 1. Read `KI-VERSION` in this folder. Resolve the newest `v*` tag with
-   `git ls-remote --tags https://github.com/saniistamar/ki.git`. When
-   git is unavailable in this environment, read the GitHub releases
-   page and use the zip door below.
+   `git ls-remote --tags --sort=-version:refname
+   https://github.com/saniistamar/ki.git` — the first tag in the list.
+   When git is unavailable in this environment, read the GitHub
+   releases page and use the zip door below.
 2. When no tag is newer than `KI-VERSION`, say so in plain words and
    stop. Applying an older version needs the educator's yes.
-3. Clone that tag to a scratch folder under `.work/`:
+3. Clone that tag into a system temporary folder, outside this one:
    `git clone --depth 1 --branch <tag>
-   https://github.com/saniistamar/ki.git`.
+   https://github.com/saniistamar/ki.git <temp-dir>`. The clone's
+   `src/KI-VERSION` is the version this update carries.
 4. Overlay the clone's `src/` onto this folder, additively. For every
    file at `src/<path>` in the clone, copy it to `<path>` in this
-   folder. Never delete any file. Never write any path that is not in
-   the clone's `src/`. When `courses/example-course/` is absent here,
-   skip it entirely: a deleted reference course never comes back.
-5. Write the new version into `KI-VERSION`.
-6. Commit silently: `ki: update to v<version>`. Tell the educator in
-   plain words that the folder's history holds the earlier state, so
-   they can ask for it back.
-7. Delete the scratch clone.
+   folder — `KI-VERSION` included. Never delete any file. Never write
+   any path that is not in the clone's `src/`. When
+   `courses/example-course/` is absent here, skip it entirely: a
+   deleted reference course never comes back.
+5. Commit silently — the updated files, nothing else — as
+   `ki: update to v<version>`. Tell the educator in plain words that
+   the folder's history holds the earlier state, so they can ask for
+   it back.
+6. Delete the temporary clone.
 
-Without git in this environment: download
-`https://github.com/saniistamar/ki/releases/latest/download/ki.zip`,
-unpack it over this folder with the same additive rules, write the new
-version into `KI-VERSION`, and say plainly that no history was kept for
-this update, so nothing can be recovered.
+When this folder has no git history — no `.git`, or git unavailable in
+this environment — use the zip door: download
+`https://github.com/saniistamar/ki/releases/latest/download/ki.zip` to
+a system temporary folder, check the version it carries against
+`KI-VERSION` (not newer: say so and ask), then unpack it over this
+folder with the same additive rules, including the example-course
+skip. Say plainly that no history was kept for this workspace, so
+nothing can be recovered.
 
 The educator's own work is untouchable: everything under
 `courses/<course>/` for every course except `example-course` — profiles,

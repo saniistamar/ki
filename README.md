@@ -19,11 +19,13 @@ anything can be recovered. You never read or run any of the machinery.
    >
    > 1. Download the zip from
    >    https://github.com/saniistamar/ki/releases/latest/download/ki.zip
-   > 2. List the zip's contents. If any file or folder already in this
-   >    folder would collide with them, stop and ask me which folder to
-   >    use instead.
+   >    to a temporary place outside this folder.
+   > 2. List the zip's contents. Before unpacking, check this folder:
+   >    stop and ask me which folder to use instead if any file or
+   >    folder here would collide with them, or if this folder already
+   >    holds a `.git` folder or a `courses/` folder.
    > 3. Unpack the zip into this folder, flat — its contents land here,
-   >    not in a subfolder.
+   >    not in a subfolder. Delete the downloaded zip afterwards.
    > 4. Read AGENTS.md in this folder and follow its "First run"
    >    section: greet me briefly and ask me the intake questions in
    >    one round.
@@ -36,7 +38,8 @@ anything can be recovered. You never read or run any of the machinery.
 
 1. Download the zip from the
    [latest release](https://github.com/saniistamar/ki/releases/latest).
-2. Unzip it into a new, empty folder.
+2. Unzip it into a new, empty folder. With a GUI, extract into that
+   folder; if a `ki` folder appears, open that one.
 3. Open the folder in ZCode and say "set up a course" — the intake
    starts on its own.
 
@@ -45,7 +48,10 @@ anything can be recovered. You never read or run any of the machinery.
 Ask "update Ki" in ZCode whenever you like. The assistant checks for a
 newer release, updates the machinery, and leaves every course,
 material, and note you own untouched. Each update is saved to the
-folder's history, so you can always ask for an earlier state back.
+folder's history, so you can always ask for an earlier state back. If
+your copy of the folder was made without its hidden files, updates
+still work, but nothing can be recovered — the assistant will say so
+plainly.
 
 ## Development
 

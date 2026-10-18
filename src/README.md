@@ -22,6 +22,10 @@ courses, materials, and notes untouched. Every update is recorded in
 the folder's history, so you can always ask for the earlier state of
 anything back. You never need to know how any of this works.
 
+If your copy of this folder was made without its hidden files (copied
+or synced, for example), updates still work, but nothing can be
+recovered — the assistant will say so plainly.
+
 ## What happens under the hood (you never need to touch this)
 
 - Every draft is reviewed by independent reviewers with different
@@ -48,4 +52,6 @@ anything back. You never need to know how any of this works.
   `courses/<course>/material/` — the assistant reads them for context and
   builds from what is there.
 - `courses/example-course/` is a filled-in example you can browse or
-  delete. `library/` is reserved for a future deep-research feature.
+  delete. Treat it as a read-only reference: updates replace it, so
+  keep nothing of yours inside it. `library/` is reserved for a future
+  deep-research feature.

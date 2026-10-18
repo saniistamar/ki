@@ -13,6 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Assert the tag matches KI-VERSION
+        run: |
+          version="$(tr -d '[:space:]' < src/KI-VERSION)"
+          if [ "v$version" != "${{ github.ref_name }}" ]; then
+            echo "release: tag ${{ github.ref_name }} does not match src/KI-VERSION $version" >&2
+            exit 1
+          fi
       - name: Build the release zip
         run: bash scripts/build.sh
       - name: Attach the zip as ki.zip
