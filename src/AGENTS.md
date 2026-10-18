@@ -90,10 +90,11 @@ When the educator asks to update Ki ("update Ki", "is there a newer Ki"):
 7. Report the update in plain words — the new version, and that their
    courses are untouched. Never show the machinery. When the release
    adds a profile section the educator's installed profiles lack — the
-   gap, in this release — offer to add it: on the educator's yes, ask
-   for their words ("What do students struggle with most in this
-   course?") and add the section with their answer to each of their
-   course profiles that lacks it, never the template's placeholder.
+   gap, in this release — the report offers to add it: on the
+   educator's yes, ask for their words ("What do students struggle
+   with most in this course?") and add the section with their answer
+   to each of their course profiles that lacks it, never the
+   template's placeholder.
 
 The educator's own work is untouchable: everything under
 `courses/<course>/` for every course except `example-course` — profiles,
