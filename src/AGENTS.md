@@ -95,9 +95,9 @@ When the educator asks to update Ki ("update Ki", "is there a newer Ki"):
    gap, in this release — the report offers to add it: on the
    educator's yes, ask for their words course by course ("What do
    students struggle with most in this course?") and add the section
-   with each course's answer to that course's profile, never the
-   template's placeholder. Commit each consented edit silently as a
-   course commit.
+   with each course's answer to that course's
+   profile, never the template's placeholder. Commit each consented
+   edit silently as a course commit.
 
 The educator's own work is untouchable: everything under
 `courses/<course>/` for every course except `example-course` — profiles,
