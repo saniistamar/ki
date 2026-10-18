@@ -10,13 +10,13 @@ draft is reviewed by independent reviewers and checked before it is
 marked done. The folder keeps its own history, so an earlier version of
 anything can be recovered. You never read or run any of the machinery.
 
-Ki works with any tool that reads an AGENTS.md file — ZCode, Codex CLI,
-Cursor, Windsurf, Amp, and others.
+Ki works with any tool that reads an AGENTS.md file — ZCode, Codex,
+Cursor, Amp, Gemini CLI, GitHub Copilot, and others.
 
 ## Install with one paste
 
 1. Create a new, empty folder for your teaching workspace and open it
-   in ZCode.
+   in your AI tool.
 2. Paste this into the chat:
 
    ```text
@@ -50,8 +50,12 @@ Cursor, Windsurf, Amp, and others.
    [latest release](https://github.com/saniistamar/ki/releases/latest).
 2. Unzip it into a new, empty folder. With a GUI, extract into that
    folder; if a `ki` folder appears, open that one.
-3. Open the folder in ZCode and say "set up a course" — the intake
+3. Open the folder in your AI tool and say "set up a course" — the intake
    starts on its own.
+
+If the download or the unzip fails, nothing is broken. Delete the
+partial folder and start again, or paste the install prompt below and
+let the assistant handle it.
 
 ## Keeping Ki current
 
@@ -64,7 +68,8 @@ templates, and guides) is replaced on update: keep nothing of yours
 inside it. Each update is saved to the folder's history, so you can
 always ask for an earlier state back. If your copy of the folder was
 made without its hidden files, updates still work, but nothing can be
-recovered — the assistant will say so plainly.
+recovered — the assistant will say so plainly. A failed update never
+breaks anything: asking again completes it.
 
 ## Development
 

@@ -20,8 +20,8 @@ course folders (`courses/example-course/` does not count; it is a filled
 reference example and may be deleted).
 
 1. Greet the educator briefly, in plain words, with one standing offer:
-   "If anything I say doesn't land, say "what?" — I'll explain it
-   differently."
+   if anything the assistant says doesn't land, the educator can say
+   "what?" and get it explained differently.
 2. Run the intake, asking everything in one round, not one question per
    message. Open the round with one situation question — "What are you
    teaching, and where do students get stuck?" — then cover every field
@@ -30,11 +30,14 @@ reference example and may be deleted).
    prerequisites, class size, what students should be able to do by the
    end, term length and meeting pattern, how learning is measured
    (assessment weights — planning only, Ki does not grade), tone, and
-   policies (late work, collaboration, AI use, accessibility). Ask also
+   policies (late work, collaboration, AI use, accessibility). The gap
+   section's answer comes from the opening question. Ask also
    for the educator's name: it labels this folder's history and stays in
    this folder. A field the educator shrugs off takes the stated
    default, as a ruling.
 3. Write `courses/<slug>/course-profile.md` from `templates/course-profile.md`.
+   Fill every placeholder with the educator's answer or a stated
+   default. A placeholder left in the profile is a defect.
 4. Initialize version control silently: `git init`, then a repo-local
    identity from the educator's name:
    `git config user.name "<Educator Name>"`,
@@ -84,6 +87,19 @@ When the educator asks to update Ki ("update Ki", "is there a newer Ki"):
    v<version>`. Tell the educator in plain words that the folder's
    history holds the earlier state, so they can ask for it back.
 6. Delete the temporary clone.
+7. Report the update in plain words — the new version, and that their
+   courses are untouched. Never show the machinery. When the release
+   adds a profile section the educator's installed profiles lack — the
+   gap, in this release — offer to add it: on the educator's yes, ask
+   for their words ("What do students struggle with most in this
+   course?") and add the section with their answer to each of their
+   course profiles that lacks it, never the template's placeholder.
+
+The educator's own work is untouchable: everything under
+`courses/<course>/` for every course except `example-course` — profiles,
+artifacts, `rulings.md`, `material/` — plus everything in `.work/` except
+its README. The overlay cannot touch any of it: it writes only paths the
+release carries.
 
 When a step fails partway, stop and say plainly what failed, that
 nothing broke, and how to try again. The overlay is safe to retry:
@@ -105,15 +121,8 @@ was kept for this workspace, so nothing can be recovered:
 5. When the release carries `KI-REMOVED`, delete exactly those paths,
    with the same educator-owned check as the git door.
 
-The educator's own work is untouchable: everything under
-`courses/<course>/` for every course except `example-course` — profiles,
-artifacts, `rulings.md`, `material/` — plus everything in `.work/` except
-its README. The overlay cannot touch any of it: it writes only paths the
-release carries. When the release adds a profile section the educator's
-installed profile lacks — the gap section, for this release — the report
-offers to add it: on the educator's yes, add it to their profile as an
-educator-approved edit. Report the update in plain words — the new
-version, and that their courses are untouched. Never show the machinery.
+If the zip door's download or unpack fails partway, say what failed,
+that nothing broke, and that asking again completes it.
 
 ## Creating an artifact
 
@@ -159,7 +168,10 @@ it to the educator in the delivery message.
 Two channels. With the educator: full sentences, plain words, jargon
 glossed at first use, tensions as tradeoffs, never condescension. In files
 (artifacts, rulings, commits): terse, active voice. With the educator,
-report results, not process — said so they can reconstruct the run.
+report results, not process — said so they can reconstruct the run. The
+first run's standing offer holds in every session: when anything you say
+doesn't land for the educator, they can say "what?" — explain it
+differently.
 
 ## Critics
 

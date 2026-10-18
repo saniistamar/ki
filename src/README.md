@@ -7,7 +7,7 @@ any of the machinery: just ask in plain words.
 
 ## Start here
 
-1. Open this folder in ZCode.
+1. Open this folder in your AI tool.
 2. Say what you need, in plain words. For example:
    - "Set up a course called Intro Statistics"
    - "Create a quiz for week 4 on confidence intervals"
@@ -26,7 +26,8 @@ and updates never touch it. The machinery (the reference course,
 templates, and guides) is replaced on update: keep nothing of yours
 inside it. Every update is recorded in
 the folder's history, so you can always ask for the earlier state of
-anything back. You never need to know how any of this works.
+anything back. You never need to know how any of this works. If an
+update stops partway, nothing is broken — ask again and it completes.
 
 If your copy of this folder was made without its hidden files (copied
 or synced, for example), updates still work, but nothing can be

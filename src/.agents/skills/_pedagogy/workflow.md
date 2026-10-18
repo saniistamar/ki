@@ -16,8 +16,9 @@ template, critic draw, checks, output folder. This file owns the order.
 - Missing details that change the artifact's shape: ask them together, in
   one round.
 - The ask may carry a deadline ("I need it before Tuesday 8am"). Say what
-  you will skip to honor it, and keep a usable draft at any interruption:
-  the educator can stop you at any point and still get something usable.
+  you will do less of to honor it — fewer questions, a tighter scope, a
+  shorter artifact; the critic volley and the checks always run. Once
+  drafting starts, a usable draft exists at any interruption.
 
 ## 2. Gather
 
