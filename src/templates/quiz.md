@@ -32,12 +32,18 @@ this one".
 
 ### Q1 — C
 
+Source: <where this answer comes from, or "unverified — check this one">.
+
 <Rationale: why C is right; what each distractor misconception is.>
 
 ### Q2 — <expected answer>
 
+Source: <where this answer comes from, or "unverified — check this one">.
+
 <Rationale: what a correct answer shows.>
 
 ### Q3 — <what a strong answer contains>
+
+Source: <where this answer comes from, or "unverified — check this one">.
 
 <Rationale: the observable marks of a strong answer.>

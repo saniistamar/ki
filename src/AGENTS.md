@@ -31,7 +31,9 @@ reference example and may be deleted).
    end, term length and meeting pattern, how learning is measured
    (assessment weights — planning only, Ki does not grade), tone, and
    policies (late work, collaboration, AI use, accessibility). The gap
-   section's answer comes from the opening question. Ask also
+   section's answer comes from the opening question; a shrug on the
+   gap leaves it empty by the educator's choice, and the artifacts
+   then aim at the outcomes. Ask also
    for the educator's name: it labels this folder's history and stays in
    this folder. A field the educator shrugs off takes the stated
    default, as a ruling.
@@ -91,9 +93,11 @@ When the educator asks to update Ki ("update Ki", "is there a newer Ki"):
    courses are untouched. Never show the machinery. When the release
    adds a profile section the educator's installed profiles lack — the
    gap, in this release — the report offers to add it: on the
-   educator's yes, ask for their words ("What do students struggle
-   with most in this course?") and add the section with their answer
-   to each course profile that lacks it, never the template's placeholder.
+   educator's yes, ask for their words course by course ("What do
+   students struggle with most in this course?") and add the section
+   with each course's answer to that course's profile, never the
+   template's placeholder. Commit each consented edit silently as a
+   course commit.
 
 The educator's own work is untouchable: everything under
 `courses/<course>/` for every course except `example-course` — profiles,
@@ -120,6 +124,10 @@ was kept for this workspace, so nothing can be recovered:
 4. Append the noted `.gitignore` lines to the new file.
 5. When the release carries `KI-REMOVED`, delete exactly those paths,
    with the same educator-owned check as the git door.
+6. Report in plain words, and make the same consent-based gap offer
+   as step 7 of the git door, course by course. A consented edit in a
+   workspace with no history is written and said plainly, not
+   committed.
 
 If the zip door's download or unpack fails partway, say what failed,
 that nothing broke, and that asking again completes it.

@@ -6,12 +6,13 @@ Ki turns a folder into a teaching workspace. You ask in plain words —
 "set up a course called Intro Statistics", "create a quiz for week 4 on
 confidence intervals" — and an AI assistant writes the quiz,
 assignment, handout, worksheet, or case study into the folder. Every
-draft is reviewed by independent reviewers and checked before it is
+draft is reviewed from independent angles and checked before it is
 marked done. The folder keeps its own history, so an earlier version of
 anything can be recovered. You never read or run any of the machinery.
 
-Ki works with any tool that reads an AGENTS.md file — ZCode, Codex,
-Cursor, Amp, Gemini CLI, GitHub Copilot, and others.
+Ki works with any tool that reads an AGENTS.md file and can run its
+commands — ZCode, Codex, Cursor, Amp, Gemini CLI, GitHub Copilot, and
+others.
 
 ## Install with one paste
 
@@ -59,7 +60,7 @@ let the assistant handle it.
 
 ## Keeping Ki current
 
-Ask "update Ki" in ZCode whenever you like. The assistant checks for a
+Ask "update Ki" in your AI tool whenever you like. The assistant checks for a
 newer release, updates the machinery, and leaves every course,
 material, and note you own untouched. Your own work lives in your
 course folders — profiles, artifacts, materials, judgment-call notes —

@@ -35,7 +35,7 @@ recovered — the assistant will say so plainly.
 
 ## What happens under the hood (you never need to touch this)
 
-- Every draft is reviewed by independent reviewers with different
+- Every draft is reviewed from independent angles with different
   concerns before it is marked done.
 - Structural checks run on every artifact.
 - Judgment calls the assistant makes alone are written down in each
