@@ -19,9 +19,13 @@ Run once, when the workspace has no git history and no educator-created
 course folders (`courses/example-course/` does not count; it is a filled
 reference example and may be deleted).
 
-1. Greet the educator briefly, in plain words.
+1. Greet the educator briefly, in plain words, with one standing offer:
+   "If anything I say doesn't land, say "what?" — I'll explain it
+   differently."
 2. Run the intake, asking everything in one round, not one question per
-   message. The intake covers every field `templates/course-profile.md`
+   message. Open the round with one situation question — "What are you
+   teaching, and where do students get stuck?" — then cover every field
+   `templates/course-profile.md`
    carries: course name and code, level, what students arrive knowing,
    prerequisites, class size, what students should be able to do by the
    end, term length and meeting pattern, how learning is measured
@@ -36,7 +40,9 @@ reference example and may be deleted).
    `git config user.name "<Educator Name>"`,
    `git config user.email "<educator-name>@ki.local"`.
    Commit everything as the workspace's first commit.
-5. If git is unavailable, say so once, plainly, and continue without it;
+5. Offer the first artifact: "Want to make a first quiz now, to see how
+   this works?" The offer is a question, never forced.
+6. If git is unavailable, say so once, plainly, and continue without it;
    versioning is then declared absent for this workspace.
 
 ## Upgrades
@@ -79,8 +85,9 @@ When the educator asks to update Ki ("update Ki", "is there a newer Ki"):
    history holds the earlier state, so they can ask for it back.
 6. Delete the temporary clone.
 
-When a step fails partway, stop and say plainly. The overlay is safe
-to retry: re-running the same update completes it.
+When a step fails partway, stop and say plainly what failed, that
+nothing broke, and how to try again. The overlay is safe to retry:
+re-running the same update completes it.
 
 When this folder has no git history — no `.git`, or git unavailable in
 this environment — use the zip door, and say plainly that no history
@@ -102,8 +109,11 @@ The educator's own work is untouchable: everything under
 `courses/<course>/` for every course except `example-course` — profiles,
 artifacts, `rulings.md`, `material/` — plus everything in `.work/` except
 its README. The overlay cannot touch any of it: it writes only paths the
-release carries. Report the update in plain words — the new version, and
-that their courses are untouched. Never show the machinery.
+release carries. When the release adds a profile section the educator's
+installed profile lacks — the gap section, for this release — the report
+offers to add it: on the educator's yes, add it to their profile as an
+educator-approved edit. Report the update in plain words — the new
+version, and that their courses are untouched. Never show the machinery.
 
 ## Creating an artifact
 
@@ -138,7 +148,9 @@ A judgment call made without asking is a ruling. Record it in
 
     R<n>: <choice> — default: <what was done>, cost if wrong: <downside>
 
-Take the most reversible default. An irreversible call — anything shaping
+Take the most reversible default. When unsure mid-artifact, say so
+plainly and ask the one question that settles it; the guess still logs
+as a ruling. An irreversible call — anything shaping
 later teaching beyond this artifact — is not yours to make: park it and put
 it to the educator in the delivery message.
 

@@ -18,6 +18,11 @@ up your own courses, or keep it as a model.
 - Prerequisites: none
 - Class size: 60
 
+## The gap
+
+Students most often struggle with sampling variability: they read a
+single sample as the whole story. The artifacts aim at that gap.
+
 ## Learning outcomes
 
 By the end of the course, students can:

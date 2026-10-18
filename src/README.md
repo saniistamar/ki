@@ -13,6 +13,8 @@ any of the machinery: just ask in plain words.
    - "Create a quiz for week 4 on confidence intervals"
    - "Turn my notes on case interviews into a class discussion case study"
 3. The assistant will ask a few questions the first time, then get to work.
+4. If anything the assistant says doesn't land, just say "what?" — it
+   will explain it differently.
 
 ## Keeping Ki current
 

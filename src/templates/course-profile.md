@@ -17,6 +17,10 @@ Every created artifact is checked against this file.
 - Prerequisites: <courses, or none>
 - Class size: <n>
 
+## The gap
+
+<what students struggle with most in this course>
+
 ## Learning outcomes
 
 By the end of the course, students can:

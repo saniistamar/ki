@@ -26,6 +26,10 @@ Points: <n> · Time: <n> minutes
 
 ## Answer key
 
+Each entry names its source — the course material it came from ("from
+your week-3 slides") — or carries the honest flag "unverified — check
+this one".
+
 ### Q1 — C
 
 <Rationale: why C is right; what each distractor misconception is.>

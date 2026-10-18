@@ -9,10 +9,15 @@ template, critic draw, checks, output folder. This file owns the order.
   covering what.
 - Read the course profile. Everything the profile decides — audience,
   outcomes, tone, policies — is fixed. Flag conflicts to the educator
-  rather than bending silently.
-- Missing details you can default: state the default and proceed.
-  Missing details that change the artifact's shape: ask them together, in
+  rather than bending silently. Aim the artifact at the profile's gap
+  section when the profile carries one.
+- Every question costs the educator attention. Ask only when the answer
+  would change the artifact; otherwise state the default and proceed.
+- Missing details that change the artifact's shape: ask them together, in
   one round.
+- The ask may carry a deadline ("I need it before Tuesday 8am"). Say what
+  you will skip to honor it, and keep a usable draft at any interruption:
+  the educator can stop you at any point and still get something usable.
 
 ## 2. Gather
 
@@ -73,3 +78,7 @@ template, critic draw, checks, output folder. This file owns the order.
   which outcomes it serves, what the reviewers said, what was checked
   (named honestly — real checks or "manual checks"), what needs their eye
   (dates, points), and any parked findings.
+- Offer the sibling format when one fits: "this quiz can become a
+  worksheet — say the word."
+- End with a "Next moves:" line — the plain-words follow-ups (harder,
+  shorter, next week).

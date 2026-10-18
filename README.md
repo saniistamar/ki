@@ -1,12 +1,17 @@
 # Ki
 
+**Your first quiz, about ten minutes from now.**
+
 Ki turns a folder into a teaching workspace. You ask in plain words —
 "set up a course called Intro Statistics", "create a quiz for week 4 on
-confidence intervals" — and an AI assistant (ZCode) writes the quiz,
+confidence intervals" — and an AI assistant writes the quiz,
 assignment, handout, worksheet, or case study into the folder. Every
 draft is reviewed by independent reviewers and checked before it is
 marked done. The folder keeps its own history, so an earlier version of
 anything can be recovered. You never read or run any of the machinery.
+
+Ki works with any tool that reads an AGENTS.md file — ZCode, Codex CLI,
+Cursor, Windsurf, Amp, and others.
 
 ## Install with one paste
 
@@ -32,7 +37,9 @@ anything can be recovered. You never read or run any of the machinery.
       section: greet me briefly and ask me the intake questions in
       one round.
 
-   Speak to me in plain words. Never show me the machinery.
+   Speak to me in plain words. Never show me the machinery. If any step
+   fails, tell me plainly what failed, that nothing broke, and how to
+   try again.
    ```
 
 3. Answer the questions. That is the whole install.

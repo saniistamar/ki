@@ -27,6 +27,9 @@ course.
 - Every answer-key entry carries a rationale — what the answer shows, and
   what misconception each distractor names. A rationale-less key is a
   defect.
+- Every answer-key entry names its source — the course material it came
+  from — or carries the honest flag "unverified — check this one". An
+  unverified answer is named as unverified, never padded.
 - Multiple-choice distractors are plausible: each one names a real
   misconception, never an absurd option.
 - Points and time limit: state the default aloud ("I'll set 20 minutes
