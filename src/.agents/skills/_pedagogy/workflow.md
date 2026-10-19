@@ -1,5 +1,10 @@
 # Workflow — creating a course artifact
 
+**Switched off.** This workflow belongs to artifact creation, and this
+version of Ki does not create artifacts (§Creating an artifact in the
+constitution). Do not run it. The text below stays, unchanged, for the
+version that carries creation again.
+
 The spine for every create-* task. The skill profile names the specifics:
 template, critic draw, checks, output folder, and the draft shape. This
 file owns the order.

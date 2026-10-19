@@ -1,9 +1,11 @@
 # Welcome to your teaching workspace
 
-This folder is set up so Ki can help you create course materials —
-quizzes, assignments, handouts, worksheets, case studies — while
-keeping its work organized and reviewable. You never need to read
-any of the machinery: just ask in plain words.
+This folder is set up so Ki can help you with your course. Share your
+material — a syllabus, slides, past quizzes — and Ki files it, reads
+it, and talks with you in plain words. A local panel beside your
+editor shows what Ki is doing and what it needs from you; you answer
+in the chat. Making course documents — quizzes, assignments, handouts,
+worksheets, case studies — is switched off in this version of Ki.
 
 ## Start here
 
@@ -14,8 +16,8 @@ any of the machinery: just ask in plain words.
    from them: its shape, level, outcomes, tone, and policies.
 3. Say what you need, in plain words. For example:
    - "Set up a course called Intro Statistics"
-   - "Create a quiz for week 4 on confidence intervals"
-   - "Turn my notes on case interviews into a class discussion case study"
+   - "What do my week-3 slides actually claim?"
+   - "Help me plan next week's quiz — what should it cover?"
 4. Ki asks for your materials first, then only the questions they
    leave open. Answer them — that is the whole setup.
 5. If anything Ki says doesn't land, just say "what?" — it will be
@@ -26,8 +28,8 @@ any of the machinery: just ask in plain words.
 From time to time, just ask: "update Ki". Ki checks whether a newer
 release exists, updates the folder's machinery, and leaves your
 courses, materials, and notes untouched. Your own work lives in your
-course folders — profiles, artifacts, materials, judgment-call notes —
-and updates never touch it. The machinery (the reference course,
+course folders — profiles, materials, judgment-call notes — and
+updates never touch it. The machinery (the reference course,
 templates, and guides) is replaced on update: keep nothing of yours
 inside it. Every update is recorded in
 the folder's history, so you can always ask for the earlier state of
@@ -43,9 +45,8 @@ recovered — Ki will say so plainly.
 
 ## What happens under the hood (you never need to touch this)
 
-- Every artifact is reviewed from independent angles with different
-  concerns before it is marked done.
-- Structural checks run on every artifact.
+- Ki's answers come from your material: it reads what you share and
+  says plainly when the material runs out.
 - Judgment calls Ki makes alone are written down in each
   course's `rulings.md`, each with what could go wrong if it is wrong.
 - The folder keeps its own history, so an earlier version of anything can
@@ -53,13 +54,9 @@ recovered — Ki will say so plainly.
 
 ## Where things land
 
-| You ask for | It appears in |
+| You share | It lands in |
 | --- | --- |
-| Quiz | `courses/<course>/quizzes/` |
-| Assignment | `courses/<course>/assignments/` |
-| Handout | `courses/<course>/handouts/` |
-| Worksheet | `courses/<course>/worksheets/` |
-| Case study | `courses/<course>/case-studies/` |
+| Course material — slides, notes, past quizzes | `courses/<course>/material/` |
 
 ## Four things worth knowing
 
@@ -68,14 +65,11 @@ recovered — Ki will say so plainly.
   this folder, and Ki files them there, telling you where they went.
   Ki reads them for context and builds from what is there. Nothing of
   yours is ever changed inside that folder.
-- Every creation starts with a quick draft: the shape of the thing —
-  what it covers, how long, what mix — shown to you for a yes before
-  any polishing. Adjust as often as you like; say "just write it" to
-  skip it.
-- Ki talks with you in your language, and writes what it makes for
-  your course — the quizzes, handouts, and the rest — in the course's
-  language. English is the default for both — say the word to change
-  either.
+- The panel is for reading: what Ki is doing, what it needs from you,
+  what was already agreed. It takes no input — the chat is where you
+  answer.
+- Ki talks with you in your language. English is the default — say
+  the word to change it.
 - `courses/example-course/` is a filled-in example you can browse or
   delete. Treat it as a read-only reference: updates replace it, so
   keep nothing of yours inside it. If you delete it and want it back

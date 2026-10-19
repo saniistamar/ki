@@ -1,10 +1,11 @@
 # The panel contract
 
 Ki's panel is a local page that shows the educator the one thing Ki
-needs from them. The agent writes small JSON files. The server this
-folder ships renders them through the design system (`../design/`).
-The agent never writes HTML. This file is the whole contract: an
-agent reading only this can write valid JSON.
+needs from them. It is one-way communication: Ki writes the small JSON
+files, the server this folder ships renders them through the design
+system (`../design/`), and the educator answers in the harness chat —
+the panel takes no input. The agent never writes HTML. This file is
+the whole contract: an agent reading only this can write valid JSON.
 
 ## Running
 
@@ -21,22 +22,20 @@ The server binds `127.0.0.1` only, on port `4400`. Flags: `--port
 <n>` (`0` picks a free port and the startup line names it), `--root
 <path>` (default: the working directory), `--demo <state>` (serve
 one demo state from `panel/demo/`; without an explicit `--root` it
-writes its answers to a throwaway folder that is removed when the
-server exits, never a real workspace). Nothing leaves the machine,
-and the server refuses requests that do not name it: the Host header
-must be this machine, and cross-origin posts to the answer route are
-turned away.
+uses a throwaway folder that is removed when the server exits, never
+a real workspace). Nothing leaves the machine, and the server refuses
+requests that do not name it: the Host header must be this machine.
+The panel takes no input: every post is refused, whatever its origin.
 
 ## The files
 
-All three live in the workspace, under `.ki/panel/`. They are Ki's
+Two live in the workspace, under `.ki/panel/`. They are Ki's
 machinery. The educator never reads them.
 
 | File | Who writes | What it holds |
 | --- | --- | --- |
 | `ask.json` | Ki, each turn | The current ask, whole. Overwritten, never appended. |
-| `settled.json` | Ki, on consuming an answer | A JSON array, one entry per decided ask, newest last, capped at 20. |
-| `answer.json` | The server, on a form post | The educator's pending answer. Ki consumes it by rename, then updates `ask.json` and appends to `settled.json`. |
+| `settled.json` | Ki, when a question settles in chat | A JSON array, one entry per decided ask, newest last, capped at 20. |
 
 Write files atomically: write a temp file in the same folder, then
 rename it over the target. A malformed or missing file always reads
@@ -48,21 +47,22 @@ Common fields, then one payload per turn type.
 
     {
       "id": "d-8f42",
-      "turn": "draft",
+      "turn": "ask",
       "course": "Introduction to Statistics · STAT 101 · Week 4 · Quiz",
       …payload
     }
 
-- `id` — short, unique per ask, made up by Ki. The answer and the
-  settled entry echo it. An answer whose `id` does not match the
-  current ask is not an answer to it.
-- `turn` — one of `status`, `ask`, `intake`, `draft`, `deliver`.
+- `id` — short, unique per ask, made up by Ki.
+- `turn` — one of `status`, `ask`, `intake`. Two further types,
+  `draft` and `deliver`, are accepted and render read-only; they
+  belong to the switched-off creation machinery below, and Ki does
+  not write them.
 - `course` — one plain line for the header, or `null` before the
   first run finishes.
 
 ### `status` — what Ki is doing, in plain words
 
-    { "lines": ["Reading your week-3 slides…", "Drafting the shape…"] }
+    { "lines": ["Reading your week-3 slides…", "Filing your syllabus…"] }
 
 One to three lines. Name the material, never the machinery.
 
@@ -75,15 +75,25 @@ One to three lines. Name the material, never the machinery.
     }
 
 `input.kind` is `choice` (with `choices` and a `default` index) or
-`text` (with an optional `hint`). Ask only what changes the artifact;
-otherwise state the default and proceed.
+`text` (with an optional `hint`). The choices render as words, the
+default marked. The panel takes no input: the educator answers in the
+harness chat, and the chat message carries the ask's substance
+whatever the panel does. Ask only what changes the work; otherwise
+state the default and proceed.
 
 ### `intake` — a first-run question
 
 Same shape as `ask`, plus an optional `"progress": "Question 2 of 4"`.
 Use it only during first run, while `course` is still `null`.
 
-### `draft` — the shape, for a yes
+### Switched off: `draft` and `deliver`
+
+Creation (§Creating an artifact in the constitution) is switched off
+in this version, and with it the two turns that carried it: the
+`draft` shape ask and the `deliver` delivery card. Their shapes stay
+here and in the renderer, kept for the version that carries creation
+again. The validator still accepts both, and a stale `ask.json` that
+carries one renders read-only, with no way to answer from the panel.
 
     {
       "lead": "Here's the shape I'd write — is it right?",
@@ -98,15 +108,11 @@ Use it only during first run, while `course` is still `null`.
 
 The five fields are fixed, in this order, with these names. `note` is
 a provenance line in the margin. `settled: true` draws the tick.
-`flag` is attention: red, and it always carries its words. `open` is
-the one row the educator answers in place. `quantity` splits its
-measurement from its prose: `measure` is the counts line ("12
-questions · 30 points · 25 minutes") and renders in the typed voice,
-`value` is the prose beside it. Put every count you want read as a
-measurement in `measure`, or in `deliver.measure` — digit runs in
-ordinary prose stay in the serif voice.
-
-### `deliver` — what landed
+`flag` is attention: red, and it always carries its words. `open`
+names the one dial the educator used to answer in place. `quantity`
+splits its measurement from its prose: `measure` is the counts line
+("12 questions · 30 points · 25 minutes") and renders in the typed
+voice, `value` is the prose beside it.
 
     {
       "lead": "Written to the shape you agreed. Week 4 quiz, ready for Tuesday.",
@@ -122,10 +128,9 @@ ordinary prose stay in the serif voice.
 
 `type` is one of the five (`quiz`, `worksheet`, `handout`,
 `assignment`, `case-study`) or any short plain label for everything
-else. The five carry their drawn mark. Anything else renders under its
-own label, in the same world — see the rules below. `checks` is
-honest: name what was checked, never overclaim. `attention` is zero to
-two lines. `path` makes the card's link work.
+else. The five carry their drawn mark. `checks` is honest: name what
+was checked, never overclaim. `attention` is zero to two lines.
+`path` makes the card's link work.
 
 ### Required fields
 
@@ -150,45 +155,18 @@ number.
     ]
 
 `what` names the decided thing, `answer` the educator's word for it,
-`at` a local `HH:MM`. The panel shows the last five entries as the
-settled strip.
+`at` a local `HH:MM`. The educator answers in the harness chat; when a
+question settles, Ki appends the line. The panel shows the last five
+entries as the settled strip.
 
-## `answer.json`
+## The educator answers in the harness
 
-Written by the server from the educator's form post. Ki reads it at
-the start of its next turn. The vocabulary is fixed: a draft answer
-is `yes` or `adjust`; an ask or intake answer is the chosen `value`.
-The server keeps only the fields the turn owns and refuses an answer
-with no substance, so an empty send never retires an ask.
-
-    { "id": "d-8f42", "turn": "draft", "answer": "yes", "open": "closed book, calculator allowed", "changes": ["make the last question harder"], "posted": "2026-10-19T14:02:11Z" }
-
-For `ask` and `intake` turns the field is `value` instead:
-`{ "id", "turn", "value": "Yes — the sheet from week 2", "posted" }`.
-
-While a matching answer is pending, the panel renders the recorded
-line — the answer's word, the open pick, the changes — and a quiet
-"Change the answer" link that reopens the form with the recorded
-values in place: the open pick and the changes text. The yes/adjust
-verb is pressed again; the form cannot pre-choose a button. A
-matching answer matches on `id` and `turn` both. A post that names a
-superseded ask, a word outside the vocabulary, or an empty send
-writes nothing: the live answer survives stale tabs.
-
-## The block protocol
-
-1. Ki writes `ask.json`. The block is open.
-2. The educator answers in the panel. The server writes
-   `answer.json` (a later post overwrites it — a change of mind
-   costs one click). The panel shows the recorded line.
-3. On its next turn, Ki renames `answer.json` away (consume), then
-   updates `ask.json` and appends the settled entry.
-
-Precedence, while a block is open: the panel answer governs. If a
-chat message arrives later and answers differently, the chat word is
-newer and wins — and Ki says which one it took, in one plain line.
-The panel is the input channel for an open block. Chat stays the
-channel for everything else.
+The panel is read-only for the educator: no form renders, and every
+post to the answer route is refused before anything is read or
+written. The chat is the answer channel. The constitution's rule is
+that Ki says the ask's substance in chat, and the educator's word
+arrives there, like every word they type. There is no precedence to
+arbitrate: the chat word is the word.
 
 ## The rules
 
@@ -196,8 +174,8 @@ channel for everything else.
   fields are the whole surface.
 - **Plain words on the surface.** No file paths in `lead`,
   `question`, `lines`, or `attention`. No tool names, no jargon.
-  `path` and `id` are machinery and render only as links and hidden
-  fields.
+  `path` is machinery and renders only as a link. `id` does not
+  render.
 - **The skeleton stays English.** Labels, the five field names, the
   type labels. The content follows the course language.
 - **Red only with words.** `flag` and `attention` always render with
@@ -216,13 +194,9 @@ channel for everything else.
   page. An unknown or missing turn is deferred debt, same as error and
   blocked states: the surface never invents a state Ki did not write.
 
-The renderer owns the markup, and its one recorded extension past the
-design system's demo markup: the actions and controls sit inside a
-form that posts to `/answer`, and the serving layer adds the settled
-strip, the choice rows, and the ruled input — carried by
-`panel/serve.css` on the system's own tokens. The files under
-`../design/` are not touched.
+The renderer owns the markup, and its serving layer adds the settled
+strip and the word-rendered choices — carried by `panel/serve.css` on
+the system's own tokens. The files under `../design/` are not touched.
 
-The panel page works with scripting disabled: every control is a
-form control and a reload refreshes. The only script the server adds
-is the live-update listener.
+The panel page works with scripting disabled: a reload refreshes. The
+only script the server adds is the live-update listener.
