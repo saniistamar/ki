@@ -65,6 +65,18 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 
 .ki-rule { border: 0; border-top: 1px solid var(--ki-rule); margin: 0; }
 
+.ki-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---- the panel shell ---------------------------------------------------- */
 
 /* The demo page sets the panel on a deeper paper, as it sits beside an editor. */
@@ -178,6 +190,10 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
   line-height: 1.4;
 }
 .ki-attn svg { flex: none; margin-top: 1px; }
+.ki-attn span { min-width: 0; }
+/* In the narrow margin the mark sits above its words, so the longest word
+   never spills past the column. */
+.ki-row__margin .ki-attn { flex-direction: column; gap: var(--ki-s1); }
 
 .ki-rough {
   display: inline-block;
@@ -214,7 +230,21 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 
 /* ---- the decision row --------------------------------------------------- */
 
-.ki-actions { display: flex; flex-wrap: wrap; gap: var(--ki-s3); padding-top: var(--ki-s2); }
+/* The decision stays on screen while the draft is read: the panel's one
+   anchored element. */
+.ki-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ki-s3);
+  margin-top: var(--ki-s2);
+  padding: var(--ki-s3) 0 var(--ki-s4);
+  background: var(--ki-paper);
+  border-top: 1px solid var(--ki-rule);
+  box-shadow: 0 -6px 14px rgb(0 0 0 / 4%);
+}
 
 .ki-btn {
   font-family: var(--ki-ui);

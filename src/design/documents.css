@@ -58,7 +58,7 @@
   text-align: right;
   padding-top: 0.28em;
 }
-.ki-q__body { max-width: var(--ki-measure); }
+.ki-q__body { max-width: 66ch; }
 .ki-q__text { max-width: 62ch; }
 .ki-q__points {
   font-family: var(--ki-typed);
@@ -84,6 +84,8 @@
 }
 
 .ki-write-line { display: block; height: 2rem; border-bottom: 1px solid var(--ki-rule-2); }
+
+.ki-answer--lines { max-width: 62ch; display: grid; }
 
 /* The embedded serif carries no italic; emphasis is weight, never a faux oblique. */
 .ki-doc em { font-style: normal; font-weight: 600; }
@@ -168,5 +170,6 @@
   .ki-artifact, .ki-note-block { box-shadow: none; }
   .ki-spec, .ki-panel { display: none; }
   .ki-rubric, .ki-q, .ki-key > .ki-q { break-inside: avoid; }
+  .ki-key { break-before: page; }
   a { text-decoration: none; }
 }
