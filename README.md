@@ -5,9 +5,9 @@
 Ki turns a folder into a teaching workspace. You ask in plain words —
 "set up a course called Intro Statistics", "create a quiz for week 4 on
 confidence intervals" — and Ki writes the quiz,
-assignment, handout, worksheet, or case study into the folder. Every
-artifact is reviewed from independent angles and checked before it is
-marked done. The folder keeps its own history, so an earlier version of
+assignment, handout, worksheet, or case study into the folder.
+Every artifact is reviewed from independent angles and checked before
+it is marked done. The folder keeps its own history, so an earlier version of
 anything can be recovered. You never read or run any of the machinery.
 
 Ki works with any tool that reads an AGENTS.md file and can run its
