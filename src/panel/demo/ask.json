@@ -1,0 +1,12 @@
+{
+  "id": "q-31c9",
+  "turn": "ask",
+  "course": "Introduction to Statistics · STAT 101 · Week 4",
+  "lead": "One thing changes the questions:",
+  "question": "Do students get a formula sheet for this quiz?",
+  "input": {
+    "kind": "choice",
+    "choices": ["Yes — the sheet from week 2", "No — from memory"],
+    "default": 0
+  }
+}

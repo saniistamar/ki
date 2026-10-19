@@ -1,0 +1,12 @@
+{
+  "id": "i-0001",
+  "turn": "intake",
+  "course": null,
+  "lead": "Setting up your course",
+  "progress": "Question 1 of 4",
+  "question": "What are you teaching, and where do students get stuck?",
+  "input": {
+    "kind": "text",
+    "hint": "For example: intro statistics; sampling bias"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "v-90d5",
+  "turn": "deliver",
+  "course": "Introduction to Statistics · STAT 101 · Week 4",
+  "lead": "Written to the shape you agreed. Week 4 quiz, ready for Tuesday.",
+  "type": "quiz",
+  "title": "Confidence intervals",
+  "meta": "Introduction to Statistics · STAT 101 · Week 4 · Serves outcomes 2 and 5 · 30 points · 25 minutes",
+  "checks": "Checked for structure, points, and a source on every answer. Two reviewers read it from different angles — one checked what a beginner would trip on, one checked what the answers assume.",
+  "attention": [
+    "Two things need your eye: the bar for the last essay, and the answer marked unverified."
+  ],
+  "next": "harder last question · a 20-minute version · a worksheet from the same slides",
+  "path": "courses/stat-101/quizzes/quiz-04.md"
+}

@@ -1,0 +1,35 @@
+{
+  "id": "d-8f42",
+  "turn": "draft",
+  "course": "Introduction to Statistics · STAT 101 · Week 4 · Quiz",
+  "lead": "Here's the shape I'd write — is it right?",
+  "draft": {
+    "coverage": {
+      "value": "Confidence intervals — what they do and don't claim — aimed at the sampling-variability gap.",
+      "note": "from week-3 slides",
+      "settled": true
+    },
+    "structure": {
+      "value": "Three blocks: 8 multiple choice, then 3 short answers, then one essay.",
+      "note": "ends on the essay",
+      "settled": true
+    },
+    "quantity": {
+      "value": "12 questions · 30 points · 25 minutes. Eight distractor sets name a real misconception.",
+      "settled": true
+    },
+    "sample": {
+      "value": "A hospital records the wait times of 36 patients; the mean is 18 minutes. Find the 95% confidence interval and say in one sentence what it claims.",
+      "flag": "your slides give the arithmetic, not the claim — check this"
+    },
+    "open": {
+      "choices": [
+        "closed book, calculator allowed",
+        "closed book, no calculator",
+        "one page of notes allowed"
+      ],
+      "default": 0,
+      "note": "say the word to change it"
+    }
+  }
+}

@@ -1,0 +1,79 @@
+/* The panel's serving layer: the few rules the live page needs beyond
+   the design system, composed on its tokens. The system itself
+   (../design/) is not touched. Served at /panel.css, after ki.css. */
+
+/* The settled strip: one quiet line per decided ask, under the course. */
+.ki-settled {
+  margin-top: var(--ki-s4);
+  padding-bottom: var(--ki-s3);
+  border-bottom: 1px solid var(--ki-rule);
+}
+.ki-settled__list {
+  list-style: none;
+  margin: var(--ki-s2) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--ki-s1);
+}
+.ki-settled__line {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ki-s3);
+  font-family: var(--ki-ui);
+  font-size: var(--ki-text-sm);
+  color: var(--ki-ink-2);
+}
+
+/* A turn's form holds its weight like any turn child. */
+.ki-panel form {
+  display: grid;
+  gap: var(--ki-s3);
+  justify-items: start;
+}
+.ki-panel form > * {
+  width: 100%;
+}
+
+/* Choice rows: the radio carries the ink, the words carry the choice. */
+.ki-choice--pick {
+  cursor: pointer;
+  font-family: var(--ki-ui);
+  font-size: var(--ki-text-sm);
+  color: var(--ki-ink);
+  margin-top: 0;
+}
+.ki-choice--pick input {
+  accent-color: var(--ki-ink);
+  flex: none;
+}
+
+/* The educator's own hand: the typed voice on a ruled line. */
+.ki-changes {
+  display: grid;
+  gap: var(--ki-s2);
+  margin-top: var(--ki-s1);
+}
+.ki-line {
+  font-family: var(--ki-typed);
+  font-size: var(--ki-text-base);
+  line-height: 1.5;
+  color: var(--ki-ink);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--ki-rule-2);
+  border-radius: 0;
+  padding: var(--ki-s1) 0;
+  width: 100%;
+}
+.ki-line:focus-visible {
+  outline-offset: 4px;
+}
+textarea.ki-line {
+  resize: vertical;
+  min-height: 2.8rem;
+}
+.ki-line::placeholder {
+  font-family: var(--ki-ui);
+  font-size: var(--ki-text-sm);
+  color: var(--ki-ink-2);
+}
