@@ -1,8 +1,10 @@
 // The panel's end-to-end check: boots the real server on a throwaway
-// root and asserts the loop the contract promises — health, rendering,
-// assets, traversal refusal, host and origin guards, the answer post,
-// the recorded state, overwrite, consume, and the doc route. Exits
-// nonzero on any miss. Run with: pnpm check
+// root and an ephemeral port, then asserts the loop the contract
+// promises — health, rendering, assets, traversal refusal, host and
+// origin guards, crash-proof malformed URLs, the answer post with its
+// vocabulary, the recorded state, overwrite, stale-post protection,
+// consume, and the doc route. Exits nonzero on any miss. Run with:
+// pnpm check
 
 import { spawn } from "node:child_process";
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, renameSync, rmSync } from "node:fs";
@@ -12,8 +14,6 @@ import { fileURLToPath } from "node:url";
 import { request } from "node:http";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const PORT = 4419;
-const base = `http://127.0.0.1:${PORT}`;
 const root = mkdtempSync(join(tmpdir(), "ki-panel-check-"));
 const panelDir = join(root, ".ki", "panel");
 mkdirSync(panelDir, { recursive: true });
@@ -25,7 +25,7 @@ const ok = (name, cond) => {
 
 const child = spawn(
   process.execPath,
-  [join(here, "server.mjs"), "--port", String(PORT), "--root", root, "--demo", "draft"],
+  [join(here, "server.mjs"), "--port", "0", "--root", root, "--demo", "draft"],
   { stdio: ["ignore", "pipe", "pipe"] }
 );
 let serverLog = "";
@@ -40,28 +40,27 @@ const cleanup = () => {
 };
 process.on("exit", cleanup);
 
-// Wait for the server to answer health.
+// Wait for the banner that names the ephemeral port.
+let port = 0;
 {
-  let up = false;
-  for (let i = 0; i < 50 && !up; i++) {
-    try {
-      const r = await fetch(`${base}/healthz`);
-      up = r.ok && (await r.text()) === "ok";
-    } catch {
-      await new Promise((r) => setTimeout(r, 100));
-    }
+  const banner = /http:\/\/127\.0\.0\.1:(\d+)/;
+  for (let i = 0; i < 50 && !port; i++) {
+    const m = banner.exec(serverLog);
+    if (m) port = Number(m[1]);
+    else await new Promise((r) => setTimeout(r, 100));
   }
-  if (!up) {
-    console.error(`server check: the server never came up\n${serverLog}`);
+  if (!port) {
+    console.error(`server check: the server never named its port\n${serverLog}`);
     process.exit(1);
   }
 }
+const base = `http://127.0.0.1:${port}`;
 
 // A raw request with a chosen Host header (fetch forbids setting it).
-const rawGet = (hostHeader, path) =>
+const rawGet = (hostHeader, pathName) =>
   new Promise((resolve) => {
     const req = request(
-      { host: "127.0.0.1", port: PORT, path, headers: { Host: hostHeader } },
+      { host: "127.0.0.1", port, path: pathName, headers: { Host: hostHeader } },
       (res) => {
         let body = "";
         res.on("data", (c) => (body += c));
@@ -71,13 +70,13 @@ const rawGet = (hostHeader, path) =>
     req.on("error", () => resolve({ status: 0, body: "" }));
     req.end();
   });
-const rawPost = (hostHeader, path, origin, body) =>
+const rawPost = (hostHeader, pathName, origin, body) =>
   new Promise((resolve) => {
     const req = request(
       {
         host: "127.0.0.1",
-        port: PORT,
-        path,
+        port,
+        path: pathName,
         method: "POST",
         headers: {
           Host: hostHeader,
@@ -125,12 +124,20 @@ const rawPost = (hostHeader, path, origin, body) =>
   const r = await rawGet("evil.example", "/");
   ok("foreign host refused", r.status === 403);
   const p = await rawPost(
-    `127.0.0.1:${PORT}`,
+    `127.0.0.1:${port}`,
     "/answer",
     "http://evil.example",
     "id=d-8f42&turn=draft&answer=yes"
   );
   ok("cross-origin post refused", p.status === 403);
+}
+
+// A malformed URL is answered, not fatal: the server stays up.
+{
+  const r = await fetch(`${base}/%zz`);
+  ok("malformed path answered", r.status === 400 || r.status === 404);
+  const h = await fetch(`${base}/healthz`);
+  ok("server survives malformed path", h.ok && (await h.text()) === "ok");
 }
 
 // The answer loop.
@@ -160,11 +167,22 @@ const rawPost = (hostHeader, path, origin, body) =>
 
   const edit = await (await fetch(`${base}/?edit`)).text();
   ok("edit reopens with the pick", edit.includes("<form") && edit.includes("<option selected>closed book, calculator allowed</option>"));
+  ok("edit keeps the changes text", edit.includes(">make the last question harder</textarea>"));
 
   // An empty answer is no answer: the ask stays open.
   await post("id=d-8f42&turn=draft");
   const stillOpen = await (await fetch(`${base}/`)).text();
   ok("empty answer ignored", stillOpen.includes("Recorded — Yes, write it"));
+
+  // Words outside the vocabulary are no answer either.
+  await post("id=d-8f42&turn=draft&answer=banana&changes=junk");
+  const afterBanana = JSON.parse(readFileSync(join(panelDir, "answer.json"), "utf8"));
+  ok("vocabulary enforced", afterBanana.answer === "yes");
+
+  // A stale tab cannot clobber the live answer.
+  await post("id=zzz&turn=draft&answer=adjust&changes=clobber");
+  const afterStale = JSON.parse(readFileSync(join(panelDir, "answer.json"), "utf8"));
+  ok("stale post does not clobber", afterStale.id === "d-8f42" && afterStale.answer === "yes");
 
   // A changed post overwrites.
   await post("id=d-8f42&turn=draft&answer=adjust&changes=shorter+essay");
@@ -176,10 +194,10 @@ const rawPost = (hostHeader, path, origin, body) =>
   const reopened = await (await fetch(`${base}/`)).text();
   ok("consume reopens", reopened.includes("Yes, write it") && reopened.includes("<form"));
 
-  // A stale id does not retire the ask.
-  await post("id=zzz&turn=draft&answer=yes");
-  const after = await (await fetch(`${base}/`)).text();
-  ok("stale answer ignored", after.includes("<form"));
+  // A wrong-turn post does not retire the reopened ask.
+  await post("id=d-8f42&turn=ask&value=hmm");
+  const afterTurn = await (await fetch(`${base}/`)).text();
+  ok("wrong turn ignored", afterTurn.includes("<form"));
 }
 
 // The doc route serves workspace files as plain text.

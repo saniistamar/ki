@@ -46,24 +46,49 @@ const DRAFT_FIELDS = [
 const TURNS = new Set(["status", "ask", "intake", "draft", "deliver"]);
 
 // The validation seam: a malformed ask is named, never rendered as calm
-// emptiness. The server logs the error and serves the idle page.
+// emptiness. The server logs the error and serves the idle page. The
+// requiredness here and the README's per-turn "Required" lines are one
+// contract: change them together.
 export function validateAsk(ask) {
   if (ask == null || typeof ask !== "object") return "ask is not an object";
   if (typeof ask.id !== "string" || !ask.id) return "id missing";
+  if (typeof ask.course !== "string" && ask.course !== null) return "course must be a line or null";
   if (!TURNS.has(ask.turn)) return `unknown turn "${esc(String(ask.turn))}"`;
-  if (ask.turn === "status" && !ask.lines?.length) return "status needs lines";
-  if ((ask.turn === "ask" || ask.turn === "intake") && typeof ask.question !== "string")
-    return "question missing";
+  if (ask.turn === "status") {
+    if (!Array.isArray(ask.lines) || !ask.lines.length || !ask.lines.every((l) => typeof l === "string" && l.trim()))
+      return "status needs an array of non-empty lines";
+  }
+  if (ask.turn === "ask" || ask.turn === "intake") {
+    if (typeof ask.question !== "string" || !ask.question.trim()) return "question missing";
+    const input = ask.input;
+    if (input == null || typeof input !== "object") return "input missing";
+    if (input.kind === "choice") {
+      if (!Array.isArray(input.choices) || !input.choices.length || !input.choices.every((c) => typeof c === "string"))
+        return "choice input needs an array of choices";
+    } else if (input.kind !== "text") {
+      return `input kind "${esc(String(input.kind))}" is not choice or text`;
+    }
+  }
   if (ask.turn === "draft") {
+    if (typeof ask.lead !== "string" || !ask.lead.trim()) return "draft lead missing";
     const d = ask.draft;
     if (d == null || typeof d !== "object") return "draft object missing";
     for (const [key] of DRAFT_FIELDS) {
       if (d[key] == null || typeof d[key] !== "object") return `draft field "${key}" missing`;
     }
-    if (!Array.isArray(d.open?.choices) || !d.open.choices.length)
+    for (const key of ["coverage", "structure", "sample"]) {
+      if (typeof d[key].value !== "string" || !d[key].value.trim())
+        return `draft field "${key}" needs a value`;
+    }
+    if ((typeof d.quantity.value !== "string" || !d.quantity.value.trim()) && !d.quantity.measure)
+      return 'draft field "quantity" needs a value or a measure';
+    if (!Array.isArray(d.open.choices) || !d.open.choices.length)
       return "draft open choices missing";
   }
-  if (ask.turn === "deliver" && typeof ask.title !== "string") return "title missing";
+  if (ask.turn === "deliver") {
+    if (typeof ask.title !== "string" || !ask.title.trim()) return "title missing";
+    if (ask.attention != null && !Array.isArray(ask.attention)) return "attention must be an array";
+  }
   return null;
 }
 
@@ -117,7 +142,7 @@ function draftTurn(ask, pending, editable) {
     draftRow(key, label, d[key] ?? {}, editable, pending?.open ?? null)
   ).join("");
   const changes = editable
-    ? `<div class="ki-changes"><p class="ki-label" id="ki-changes-label">What should change?</p><textarea class="ki-line" name="changes" rows="2" aria-labelledby="ki-changes-label" placeholder="Optional — one change per line"></textarea></div>`
+    ? `<div class="ki-changes"><p class="ki-label" id="ki-changes-label">What should change?</p><textarea class="ki-line" name="changes" rows="2" aria-labelledby="ki-changes-label" placeholder="Optional — one change per line">${esc(pending?.changes?.join("\n") ?? "")}</textarea></div>`
     : "";
   const actions = editable
     ? `<div class="ki-actions"><button class="ki-btn" type="submit" name="answer" value="yes">Yes, write it</button><button class="ki-btn ki-btn--quiet" type="submit" name="answer" value="adjust">Adjust</button></div>`
@@ -133,7 +158,7 @@ function draftTurn(ask, pending, editable) {
     if (pending.changes?.length) bits.push(pending.changes.map(esc).join("; "));
     recorded = `<p class="ki-said">Recorded — ${bits.join(" · ")}.</p><a class="ki-btn ki-btn--quiet" href="/?edit">Change the answer</a>`;
   }
-  return `<p class="ki-who">Ki</p><p class="ki-said">${esc(ask.lead ?? "Here's the shape I'd write — is it right?")}</p>${body}${recorded}`;
+  return `<p class="ki-who">Ki</p><p class="ki-said">${esc(ask.lead)}</p>${body}${recorded}`;
 }
 
 function askControl(input, pending) {
@@ -228,7 +253,8 @@ export function renderPanel(ask, settled, options = {}) {
 
   const course = ask?.course ?? null;
   const when = course ?? (ask?.turn === "intake" ? "Setting up your course" : "");
-  const header = `<header class="ki-context"><p class="ki-context__where">Ki</p><p class="ki-context__when">${esc(when)}</p></header>`;
+  const whenLine = when ? `<p class="ki-context__when">${esc(when)}</p>` : "";
+  const header = `<header class="ki-context"><p class="ki-context__where">Ki</p>${whenLine}</header>`;
 
   let threadInner;
   if (!ask) {

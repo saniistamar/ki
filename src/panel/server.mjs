@@ -22,11 +22,15 @@ const flag = (name) => {
   return i === -1 ? null : args[i + 1];
 };
 const PORT = Number(flag("port") ?? 4400);
-if (!Number.isInteger(PORT) || PORT < 1 || PORT > 65535) {
-  console.error("Port must be a number between 1 and 65535.");
+if (!Number.isInteger(PORT) || PORT < 0 || PORT > 65535) {
+  console.error("Port must be a number between 0 and 65535 (0 picks a free port).");
   process.exit(1);
 }
 const DEMO = flag("demo");
+if (DEMO && !/^[\w-]+$/.test(DEMO)) {
+  console.error(`No demo state "${DEMO}". Run with --demo <status|ask|intake|draft|deliver>.`);
+  process.exit(1);
+}
 // Demo mode without an explicit --root stays out of any real workspace.
 const ROOT = resolve(
   flag("root") ?? (DEMO ? mkdtempSync(join(tmpdir(), "ki-panel-")) : process.cwd())
@@ -68,7 +72,7 @@ const loadState = async () => {
 
 const loadPending = async (ask) => {
   const answer = await readJson(join(panelDir, "answer.json"));
-  return answer && ask && answer.id === ask.id ? answer : null;
+  return answer && ask && answer.id === ask.id && answer.turn === ask.turn ? answer : null;
 };
 
 const atomicWrite = async (p, text) => {
@@ -94,12 +98,14 @@ const NOSNIFF = { "x-content-type-options": "nosniff" };
 // educator browses can still address 127.0.0.1. Host must name this
 // machine (this kills DNS rebinding), and a cross-origin post to the
 // answer route is refused (a browser form post always carries Origin).
+// boundPort follows an ephemeral --port 0 once the socket is live.
+let boundPort = PORT;
 const hostOk = (req) =>
-  req.headers.host === `127.0.0.1:${PORT}` || req.headers.host === `localhost:${PORT}`;
+  req.headers.host === `127.0.0.1:${boundPort}` || req.headers.host === `localhost:${boundPort}`;
 const originOk = (req) => {
   const origin = req.headers.origin;
   return (
-    !origin || origin === `http://127.0.0.1:${PORT}` || origin === `http://localhost:${PORT}`
+    !origin || origin === `http://127.0.0.1:${boundPort}` || origin === `http://localhost:${boundPort}`
   );
 };
 
@@ -129,12 +135,22 @@ const serveInside = async (res, base, rel, plainOnly = false) => {
 const LISTENER = 'new EventSource("/events").addEventListener("reload", () => location.reload());\n';
 
 const server = createServer(async (req, res) => {
-  const url = new URL(req.url ?? "/", "http://127.0.0.1");
-  const path = decodeURIComponent(url.pathname);
-
+  // The Host check reads only headers; a malformed URL dies here, not
+  // the process: nothing outside the try can throw.
   if (!hostOk(req)) {
     res.writeHead(403, { "content-type": "text/plain", ...NOSNIFF });
     res.end("refused");
+    return;
+  }
+
+  let url;
+  let path;
+  try {
+    url = new URL(req.url ?? "/", "http://127.0.0.1");
+    path = decodeURIComponent(url.pathname);
+  } catch {
+    res.writeHead(400, { "content-type": "text/plain", ...NOSNIFF });
+    res.end("bad request");
     return;
   }
 
@@ -194,16 +210,22 @@ const server = createServer(async (req, res) => {
         timer = setTimeout(() => res.write("event: reload\ndata: now\n\n"), 60);
       };
       const watchers = [];
-      for (const dir of [DEMO ? demoDir : panelDir]) {
-        try {
-          const w = watchCb(dir, { recursive: true });
-          w.on("change", (event, file) => {
-            if (!file || /\.(json|css)$/.test(file)) bump();
-          });
-          watchers.push(w);
-        } catch {
-          // no state folder yet; nothing to watch
-        }
+      let armed = true;
+      try {
+        const w = watchCb(DEMO ? demoDir : panelDir, { recursive: true });
+        w.on("change", (event, file) => {
+          if (!file || /\.(json|css)$/.test(file)) bump();
+        });
+        watchers.push(w);
+      } catch {
+        // No state folder yet. End the stream: the browser's EventSource
+        // reconnects on its own, and the next connection re-arms the
+        // watcher once the folder exists.
+        armed = false;
+      }
+      if (!armed) {
+        res.end();
+        return;
       }
       req.on("close", () => {
         clearTimeout(timer);
@@ -228,21 +250,39 @@ const server = createServer(async (req, res) => {
         }
       }
       const sp = new URLSearchParams(Buffer.concat(chunks).toString("utf8"));
+      const { ask } = await loadState();
       const id = sp.get("id") ?? "";
-      const turn = sp.get("turn") ?? "";
-      const answer = { id, turn, posted: new Date().toISOString() };
+      // A post that does not name the open ask is a stale tab or a
+      // stranger: it never overwrites the educator's live answer.
+      const current = ask && id === ask.id ? ask : null;
+      const answer = { id, turn: current?.turn ?? sp.get("turn") ?? "", posted: new Date().toISOString() };
       // The answer shape is part of the contract: only the fields the
-      // turn owns are kept, and an answer with no substance is no answer.
-      const allowed = turn === "draft" ? ["answer", "open", "changes"] : ["value"];
+      // turn owns are kept, the vocabulary is fixed (a draft answer is
+      // yes or adjust), and an answer with no substance is no answer.
       let hasSubstance = false;
-      for (const key of allowed) {
-        const v = sp.get(key) ?? "";
-        if (!v) continue;
-        answer[key] =
-          key === "changes" ? v.split(/\r?\n/).map((s) => s.trim()).filter(Boolean) : v;
-        if (key !== "changes" || answer[key].length) hasSubstance = true;
+      if (current) {
+        if (current.turn === "draft") {
+          const word = sp.get("answer") ?? "";
+          if (word === "yes" || word === "adjust") {
+            answer.answer = word;
+            hasSubstance = true;
+          }
+          const open = sp.get("open") ?? "";
+          if (open) answer.open = open;
+          const changes = (sp.get("changes") ?? "")
+            .split(/\r?\n/)
+            .map((s) => s.trim())
+            .filter(Boolean);
+          if (changes.length) answer.changes = changes;
+        } else if (current.turn === "ask" || current.turn === "intake") {
+          const value = sp.get("value") ?? "";
+          if (value) {
+            answer.value = value;
+            hasSubstance = true;
+          }
+        }
       }
-      if (id && hasSubstance) {
+      if (current && hasSubstance) {
         await mkdir(panelDir, { recursive: true });
         await atomicWrite(join(panelDir, "answer.json"), `${JSON.stringify(answer, null, 2)}\n`);
       }
@@ -268,12 +308,14 @@ server.on("error", (err) => {
   throw err;
 });
 
-// Validate the demo name at boot, not on first request.
+// Validate the demo name at boot, not on first request. --port 0 binds
+// an ephemeral port; boundPort keeps the Host allowlist honest.
 if (DEMO) {
   readFile(join(demoDir, `${DEMO}.json`), "utf8").then(
     () => {
       server.listen(PORT, "127.0.0.1", () => {
-        console.log(`Ki panel on http://127.0.0.1:${PORT} (demo: ${DEMO}, root: ${ROOT})`);
+        boundPort = server.address().port;
+        console.log(`Ki panel on http://127.0.0.1:${boundPort} (demo: ${DEMO}, root: ${ROOT})`);
       });
     },
     () => {
@@ -285,6 +327,7 @@ if (DEMO) {
   );
 } else {
   server.listen(PORT, "127.0.0.1", () => {
-    console.log(`Ki panel on http://127.0.0.1:${PORT} (root: ${ROOT})`);
+    boundPort = server.address().port;
+    console.log(`Ki panel on http://127.0.0.1:${boundPort} (root: ${ROOT})`);
   });
 }
