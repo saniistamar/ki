@@ -8,6 +8,7 @@
   "packageManager": "pnpm@12.12.1",
   "scripts": {
     "panel": "node src/panel/server.mjs",
-    "test": "node src/panel/selftest.mjs"
+    "test": "node src/panel/selftest.mjs",
+    "check": "node src/panel/selftest.mjs && node src/panel/check.mjs"
   }
 }

@@ -8,14 +8,22 @@ agent reading only this can write valid JSON.
 
 ## Running
 
-From the workspace root:
+In the educator's workspace (the installed layout):
 
     node panel/server.mjs
 
+In this repository (the dev layout), the same file sits one level
+deeper — `node src/panel/server.mjs`, or `pnpm panel`. The script
+entry `pnpm check` runs the renderer self-test and the server's
+end-to-end check.
+
 The server binds `127.0.0.1` only, on port `4400`. Flags: `--port
 <n>`, `--root <path>` (default: the working directory), `--demo
-<state>` (serve one demo state from `panel/demo/`, for testing).
-Nothing leaves the machine. Nothing installs.
+<state>` (serve one demo state from `panel/demo/`; without an
+explicit `--root` it writes its answers to a throwaway folder, never
+a real workspace). Nothing leaves the machine, and the server refuses
+requests that do not name it: the Host header must be this machine,
+and cross-origin posts to the answer route are turned away.
 
 ## The files
 
@@ -80,7 +88,7 @@ Use it only during first run, while `course` is still `null`.
       "draft": {
         "coverage":  { "value": "…", "note": "from week-3 slides", "settled": true },
         "structure": { "value": "…", "settled": true },
-        "quantity":  { "value": "12 questions · 30 points · 25 minutes", "settled": true },
+        "quantity":  { "measure": "12 questions · 30 points · 25 minutes", "value": "Eight distractors name a real misconception.", "settled": true },
         "sample":    { "value": "…", "flag": "your slides give the arithmetic, not the claim — check this" },
         "open":      { "choices": ["closed book, calculator allowed", "closed book, no calculator"], "default": 0, "note": "say the word to change it" }
       }
@@ -89,7 +97,12 @@ Use it only during first run, while `course` is still `null`.
 The five fields are fixed, in this order, with these names. `note` is
 a provenance line in the margin. `settled: true` draws the tick.
 `flag` is attention: red, and it always carries its words. `open` is
-the one row the educator answers in place.
+the one row the educator answers in place. `quantity` splits its
+measurement from its prose: `measure` is the counts line ("12
+questions · 30 points · 25 minutes") and renders in the typed voice,
+`value` is the prose beside it. Put every count you want read as a
+measurement in `measure`, or in `deliver.measure` — digit runs in
+ordinary prose stay in the serif voice.
 
 ### `deliver` — what landed
 
@@ -97,7 +110,8 @@ the one row the educator answers in place.
       "lead": "Written to the shape you agreed. Week 4 quiz, ready for Tuesday.",
       "type": "quiz",
       "title": "Confidence intervals",
-      "meta": "Introduction to Statistics · STAT 101 · Week 4 · 30 points · 25 minutes",
+      "meta": "Introduction to Statistics · STAT 101 · Week 4",
+      "measure": "30 points · 25 minutes",
       "checks": "Checked for structure, points, and a source on every answer.",
       "attention": ["Two things need your eye: the essay bar, and the unverified answer."],
       "next": "harder last question · a 20-minute version · a worksheet from the same slides",
@@ -124,12 +138,20 @@ settled strip.
 ## `answer.json`
 
 Written by the server from the educator's form post. Ki reads it at
-the start of its next turn.
+the start of its next turn. The vocabulary is fixed: a draft answer
+is `yes` or `adjust`; an ask or intake answer is the chosen `value`.
+The server keeps only the fields the turn owns and refuses an answer
+with no substance, so an empty send never retires an ask.
 
     { "id": "d-8f42", "turn": "draft", "answer": "yes", "open": "closed book, calculator allowed", "changes": ["make the last question harder"], "posted": "2026-10-19T14:02:11Z" }
 
 For `ask` and `intake` turns the field is `value` instead:
 `{ "id", "turn", "value": "Yes — the sheet from week 2", "posted" }`.
+
+While a matching answer is pending, the panel renders the recorded
+line — the answer's word, the open pick, the changes — and a quiet
+"Change the answer" link that reopens the form with the recorded
+values in place, not the defaults.
 
 ## The block protocol
 
@@ -166,6 +188,18 @@ channel for everything else.
   plain label.
 - **One ask at a time.** Overwrite `ask.json`. A new ask supersedes
   the old one; the settled strip is the memory, not the file.
+- **Malformed asks are named, not rendered.** The server checks every
+  `ask.json` against the shapes above. A rejected ask logs its reason
+  to the server output (where the agent reads it) and serves the idle
+  page. An unknown or missing turn is deferred debt, same as error and
+  blocked states: the surface never invents a state Ki did not write.
+
+The renderer owns the markup, and its one recorded extension past the
+design system's demo markup: the actions and controls sit inside a
+form that posts to `/answer`, and the serving layer adds the settled
+strip, the choice rows, and the ruled input — carried by
+`panel/serve.css` on the system's own tokens. The files under
+`../design/` are not touched.
 
 The panel page works with scripting disabled: every control is a
 form control and a reload refreshes. The only script the server adds

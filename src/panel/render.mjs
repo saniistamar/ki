@@ -7,10 +7,6 @@
 const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" };
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ESC[c]);
 
-// Measurements render in the typed voice: wrap digit runs after escaping.
-const NUM = /\d[\d.,·\s%():–\-]*\d|\d/g;
-const num = (s) => esc(s).replace(NUM, (m) => `<span class="ki-num">${m}</span>`);
-
 const TICK =
   '<svg class="ki-tick" width="12" height="12" viewBox="0 0 12 12" role="img"><title>Settled</title><path d="M1.5 6.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const ATTN_MARK =
@@ -47,6 +43,30 @@ const DRAFT_FIELDS = [
   ["open", "Open choices"],
 ];
 
+const TURNS = new Set(["status", "ask", "intake", "draft", "deliver"]);
+
+// The validation seam: a malformed ask is named, never rendered as calm
+// emptiness. The server logs the error and serves the idle page.
+export function validateAsk(ask) {
+  if (ask == null || typeof ask !== "object") return "ask is not an object";
+  if (typeof ask.id !== "string" || !ask.id) return "id missing";
+  if (!TURNS.has(ask.turn)) return `unknown turn "${esc(String(ask.turn))}"`;
+  if (ask.turn === "status" && !ask.lines?.length) return "status needs lines";
+  if ((ask.turn === "ask" || ask.turn === "intake") && typeof ask.question !== "string")
+    return "question missing";
+  if (ask.turn === "draft") {
+    const d = ask.draft;
+    if (d == null || typeof d !== "object") return "draft object missing";
+    for (const [key] of DRAFT_FIELDS) {
+      if (d[key] == null || typeof d[key] !== "object") return `draft field "${key}" missing`;
+    }
+    if (!Array.isArray(d.open?.choices) || !d.open.choices.length)
+      return "draft open choices missing";
+  }
+  if (ask.turn === "deliver" && typeof ask.title !== "string") return "title missing";
+  return null;
+}
+
 const attn = (words) => `<p class="ki-attn">${ATTN_MARK}<span>${esc(words)}</span></p>`;
 const statusLine = (text) => `<p class="ki-status">${DASH}${esc(text)}</p>`;
 const hidden = (name, value) => `<input type="hidden" name="${name}" value="${esc(value)}">`;
@@ -60,28 +80,33 @@ function margin(row, editable) {
   return `<div class="ki-row__margin">${parts.join("")}</div>`;
 }
 
-function draftRow(key, label, row, editable) {
+function draftRow(key, label, row, editable, pendingOpen) {
   const body = [];
   if (key === "sample") {
     body.push(`<p class="ki-label">${label} <span class="ki-rough">rough</span></p>`);
     body.push(`<p class="ki-value">${esc(row.value)}</p>`);
   } else if (key === "open") {
     body.push(`<p class="ki-label" id="ki-open-label">${label}</p>`);
-    const def = row.default ?? 0;
+    const choices = row.choices ?? [];
+    const def = choices.indexOf(pendingOpen) >= 0 ? choices.indexOf(pendingOpen) : row.default ?? 0;
     if (editable) {
-      const options = (row.choices ?? [])
+      const options = choices
         .map((c, i) => `<option${i === def ? " selected" : ""}>${esc(c)}</option>`)
         .join("");
       body.push(
-        `<div class="ki-choice"><select class="ki-select" name="open" aria-labelledby="ki-open-label">${options}</select><span class="ki-default">default</span></div>`
+        `<div class="ki-choice"><select class="ki-select" name="open" aria-labelledby="ki-open-label">${options}</select>${def === (row.default ?? 0) && !pendingOpen ? '<span class="ki-default">default</span>' : ""}</div>`
       );
     } else {
-      const chosen = row.choices?.[row.answered ?? def] ?? "";
-      body.push(`<p class="ki-value">${esc(chosen)}</p>`);
+      body.push(`<p class="ki-value">${esc(choices[def] ?? "")}</p>`);
     }
+  } else if (key === "quantity") {
+    body.push(`<p class="ki-label">${label}</p>`);
+    const measure = row.measure ? `<span class="ki-num">${esc(row.measure)}</span>` : "";
+    const prose = row.value ? ` ${esc(row.value)}` : "";
+    body.push(`<p class="ki-value">${measure}${prose}</p>`);
   } else {
     body.push(`<p class="ki-label">${label}</p>`);
-    body.push(`<p class="ki-value">${key === "quantity" ? num(row.value) : esc(row.value)}</p>`);
+    body.push(`<p class="ki-value">${esc(row.value)}</p>`);
   }
   return `<div class="ki-row"><div class="ki-row__body">${body.join("")}</div>${margin(row, editable)}</div>`;
 }
@@ -89,7 +114,7 @@ function draftRow(key, label, row, editable) {
 function draftTurn(ask, pending, editable) {
   const d = ask.draft ?? {};
   const rows = DRAFT_FIELDS.map(([key, label]) =>
-    draftRow(key, label, d[key] ?? {}, editable)
+    draftRow(key, label, d[key] ?? {}, editable, pending?.open ?? null)
   ).join("");
   const changes = editable
     ? `<div class="ki-changes"><p class="ki-label" id="ki-changes-label">What should change?</p><textarea class="ki-line" name="changes" rows="2" aria-labelledby="ki-changes-label" placeholder="Optional — one change per line"></textarea></div>`
@@ -103,28 +128,29 @@ function draftTurn(ask, pending, editable) {
     : inner;
   let recorded = "";
   if (pending) {
-    const word = pending.answer === "yes" ? "Yes, write it" : "Adjust";
-    const tail = pending.changes?.length ? `: ${pending.changes.map(esc).join("; ")}` : "";
-    recorded = `<p class="ki-said">Recorded — ${word}${tail}.</p><a class="ki-btn ki-btn--quiet" href="/?edit">Change the answer</a>`;
+    const bits = [pending.answer === "yes" ? "Yes, write it" : "Adjust"];
+    if (pending.open) bits.push(esc(pending.open));
+    if (pending.changes?.length) bits.push(pending.changes.map(esc).join("; "));
+    recorded = `<p class="ki-said">Recorded — ${bits.join(" · ")}.</p><a class="ki-btn ki-btn--quiet" href="/?edit">Change the answer</a>`;
   }
   return `<p class="ki-who">Ki</p><p class="ki-said">${esc(ask.lead ?? "Here's the shape I'd write — is it right?")}</p>${body}${recorded}`;
 }
 
-function askControl(input, editable) {
-  if (!editable) {
-    return input.kind === "choice"
-      ? `<p class="ki-value">${esc(input.choices?.[input.answered ?? input.default ?? 0] ?? "")}</p>`
-      : `<p class="ki-value">${esc(input.value ?? "")}</p>`;
-  }
+function askControl(input, pending) {
   if (input.kind === "choice") {
-    const def = input.default ?? 0;
-    return (input.choices ?? [])
+    const choices = input.choices ?? [];
+    let def = input.default ?? 0;
+    if (pending?.value) {
+      const i = choices.indexOf(pending.value);
+      if (i >= 0) def = i;
+    }
+    return choices
       .map((c, i) =>
-        `<label class="ki-choice ki-choice--pick"><input type="radio" name="value" value="${esc(c)}"${i === def ? " checked" : ""}><span>${esc(c)}</span>${i === def ? '<span class="ki-default">default</span>' : ""}</label>`
+        `<label class="ki-choice ki-choice--pick"><input type="radio" name="value" value="${esc(c)}"${i === def ? " checked" : ""}><span>${esc(c)}</span>${i === (input.default ?? 0) && !pending?.value ? '<span class="ki-default">default</span>' : ""}</label>`
       )
       .join("");
   }
-  return `<input class="ki-line" type="text" name="value" placeholder="${esc(input.hint ?? "")}">`;
+  return `<input class="ki-line" type="text" name="value" required placeholder="${esc(input.hint ?? "")}" value="${esc(pending?.value ?? "")}">`;
 }
 
 function askTurn(ask, pending, editable) {
@@ -132,11 +158,11 @@ function askTurn(ask, pending, editable) {
   if (ask.lead) parts.push(`<p class="ki-said">${esc(ask.lead)}</p>`);
   if (ask.progress) parts.push(statusLine(ask.progress));
   parts.push(`<p class="ki-said">${esc(ask.question)}</p>`);
-  if (pending) {
+  if (pending && !editable) {
     parts.push(`<p class="ki-said">Recorded — ${esc(pending.value ?? "")}.</p>`);
     parts.push(`<a class="ki-btn ki-btn--quiet" href="/?edit">Change the answer</a>`);
   } else {
-    const inner = `<div class="ki-ask">${askControl(ask.input ?? {}, editable)}</div><div class="ki-actions"><button class="ki-btn" type="submit">Send</button></div>`;
+    const inner = `<div class="ki-ask">${askControl(ask.input ?? {}, pending)}</div><div class="ki-actions"><button class="ki-btn" type="submit">Send</button></div>`;
     parts.push(
       `<form action="/answer" method="post">${hidden("id", ask.id)}${hidden("turn", ask.turn)}${inner}</form>`
     );
@@ -155,7 +181,10 @@ function deliverTurn(ask) {
   if (ask.lead) parts.push(`<p class="ki-said">${esc(ask.lead)}</p>`);
   const head = [`<p class="ki-type-code">${code}</p>`];
   head.push(`<h2 class="ki-artifact__title">${esc(ask.title ?? "")}</h2>`);
-  if (ask.meta) head.push(`<p class="ki-artifact__meta">${num(ask.meta)}</p>`);
+  if (ask.meta || ask.measure) {
+    const measure = ask.measure ? ` · <span class="ki-num">${esc(ask.measure)}</span>` : "";
+    head.push(`<p class="ki-artifact__meta">${esc(ask.meta ?? "")}${measure}</p>`);
+  }
   const body = [];
   if (ask.checks) body.push(`<p class="ki-checks">${esc(ask.checks)}</p>`);
   for (const a of ask.attention ?? []) body.push(attn(a));

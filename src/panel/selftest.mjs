@@ -5,7 +5,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { renderPanel } from "./render.mjs";
+import { renderPanel, validateAsk } from "./render.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const demoDir = join(here, "demo");
@@ -27,15 +27,24 @@ function absent(name, html, needles) {
 }
 const always = ["<!DOCTYPE html>", 'class="ki-panel"', 'ki-context__where">Ki'];
 
-// Every demo state renders, carries the shell, no inline style, no script.
+// Every demo state renders, validates, carries the shell, no inline style, no script.
 for (const f of readdirSync(demoDir)) {
   if (!f.endsWith(".json") || f.startsWith("_")) continue;
   const state = f.replace(/\.json$/, "");
-  const html = renderPanel(demo(state), settled);
+  const ask = demo(state);
+  const bad = validateAsk(ask);
+  if (bad) failures.push(`${state}: rejected by validateAsk — ${bad}`);
+  const html = renderPanel(ask, settled);
   check(state, html, always);
   absent(state, html, ["style=\""]);
   absent(state, html, ["<script"]);
 }
+
+// Validation names the malformed ask instead of rendering it calm.
+if (validateAsk({ id: "x", turn: "guess" }) === null) failures.push("validate: unknown turn accepted");
+if (validateAsk({ turn: "draft" }) === null) failures.push("validate: missing id accepted");
+if (validateAsk({ id: "x", turn: "draft", draft: { coverage: {} } }) === null)
+  failures.push("validate: missing draft fields accepted");
 
 // Draft: five fields, the form, the id, the actions, the marks.
 {
@@ -65,7 +74,7 @@ for (const f of readdirSync(demoDir)) {
       "What should change?",
     ]
   );
-  check("draft", html, ['<span class="ki-num">12</span>', '<span class="ki-num">30</span>']);
+  check("draft", html, ['<span class="ki-num">12 questions · 30 points · 25 minutes</span>']);
 }
 
 // Recorded draft: the ask retires, the change link stays, no form.
@@ -81,11 +90,15 @@ for (const f of readdirSync(demoDir)) {
   check(
     "draft-recorded",
     html,
-    ["Recorded — Yes, write it: make the last question harder.", "Change the answer", "ki-draft"]
+    [
+      "Recorded — Yes, write it · closed book, calculator allowed · make the last question harder.",
+      "Change the answer",
+      "ki-draft",
+    ]
   );
   absent("draft-recorded", html, ["<form"]);
   const editing = renderPanel(demo("draft"), settled, { pending, edit: true });
-  check("draft-edit", editing, ["<form", "Yes, write it"]);
+  check("draft-edit", editing, ["<form", "Yes, write it", "<option selected>closed book, calculator allowed</option>"]);
 }
 
 // Ask: the question, the choices, the default named, the send.
@@ -97,6 +110,7 @@ for (const f of readdirSync(demoDir)) {
     [
       "Do students get a formula sheet",
       'type="radio" name="value"',
+      'name="id" value="q-31c9"',
       "Yes — the sheet from week 2",
       "No — from memory",
       "default",
@@ -108,6 +122,11 @@ for (const f of readdirSync(demoDir)) {
   });
   check("ask-recorded", answered, ["Recorded — No — from memory.", "Change the answer"]);
   absent("ask-recorded", answered, ["<form"]);
+  const reasked = renderPanel(demo("ask"), settled, {
+    pending: { id: "q-31c9", turn: "ask", value: "No — from memory" },
+    edit: true,
+  });
+  check("ask-edit", reasked, ['value="No — from memory" checked', "<form"]);
 }
 
 // Intake: progress line, text input, no course line yet.
@@ -116,7 +135,13 @@ for (const f of readdirSync(demoDir)) {
   check(
     "intake",
     html,
-    ["Question 1 of 4", "What are you teaching", 'type="text" name="value"', "Setting up your course"]
+    [
+      "Question 1 of 4",
+      "What are you teaching",
+      'type="text" name="value" required',
+      'name="id" value="i-0001"',
+      "Setting up your course",
+    ]
   );
 }
 
@@ -146,7 +171,7 @@ for (const f of readdirSync(demoDir)) {
 }
 
 // Settled strip: the label, the lines, the typed time.
-check("settled", renderPanel(demo("draft"), settled), ["Settled", "Formula sheet", "13:58"]);
+check("settled", renderPanel(demo("draft"), settled), ["Settled", "Quiz length", "13:41"]);
 absent("settled-none", renderPanel(demo("draft"), []), ["ki-settled"]);
 
 // Idle: quiet, honest.

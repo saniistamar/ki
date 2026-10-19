@@ -15,7 +15,8 @@
       "settled": true
     },
     "quantity": {
-      "value": "12 questions · 30 points · 25 minutes. Eight distractor sets name a real misconception.",
+      "measure": "12 questions · 30 points · 25 minutes",
+      "value": "Eight distractor sets name a real misconception.",
       "settled": true
     },
     "sample": {
