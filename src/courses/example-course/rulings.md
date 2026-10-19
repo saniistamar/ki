@@ -1,6 +1,6 @@
 # Rulings — example-course
 
-Judgment calls made by the assistant without asking, each with the default
+Judgment calls made by Ki without asking, each with the default
 taken and the cost if it is wrong. New rulings append below, numbered on.
 
     R<n>: <choice> — default: <what was done>, cost if wrong: <downside>

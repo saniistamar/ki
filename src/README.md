@@ -16,8 +16,8 @@ any of the machinery: just ask in plain words.
    - "Set up a course called Intro Statistics"
    - "Create a quiz for week 4 on confidence intervals"
    - "Turn my notes on case interviews into a class discussion case study"
-4. Ki asks for your materials first, then only the few questions the
-   materials leave open. Answer them — that is the whole setup.
+4. Ki asks for your materials first, then only the questions they
+   leave open. Answer them — that is the whole setup.
 5. If anything Ki says doesn't land, just say "what?" — it will be
    explained differently.
 

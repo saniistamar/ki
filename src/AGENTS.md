@@ -41,6 +41,12 @@ notes, past quizzes. Every file lands in the owning course's
 says where it landed. Material can arrive at any time: during intake,
 between artifacts, months later. Routing is the same move every time.
 
+Scan the workspace root at the start of every session and before
+building any artifact. A file or folder there that is neither
+machinery, nor a dotfile, nor `MY-KI.md` is a drop to route. A file
+already waiting at the root when the intake begins counts as shared
+material.
+
 | Door | Route |
 | --- | --- |
 | Attached in the chat | Save it under `courses/<course>/material/` under a plain name |
@@ -51,18 +57,20 @@ between artifacts, months later. Routing is the same move every time.
   what leaves, not what arrives.
 - When this session cannot fetch, say so plainly and ask for the
   material attached or dropped instead.
-- The root door routes only educator files. It never touches the
-  installed system — every path the release carries — or dotfiles, or
-  `MY-KI.md`.
+- A dropped folder routes the same way: the whole folder moves
+  verbatim into `material/`.
 - When no course exists yet, the material waits: a root drop stays
   put, an attachment stays in the conversation. Route it when the
   intake names the course and writes its folder.
 - With more than one course and no named owner, ask one focused
   question.
-- When `material/` already carries the name, land the file under a
-  numbered suffix (`syllabus-2.md`). The content stays verbatim.
+- When `material/` already carries the name, land the file under the
+  next free numbered suffix (`syllabus-2.md`, `syllabus-3.md`). The
+  content stays verbatim.
 - When new material answers a field a stated default filled, name the
   field in plain words and update the profile on the educator's yes.
+- Commit routed material silently as a course commit:
+  `courses: file the <file>`.
 - Never edit a file in `material/`.
 
 ## First run
@@ -71,8 +79,9 @@ Run once, when the workspace has no git history and no educator-created
 course folders (`courses/example-course/` does not count; it is a filled
 reference example and may be deleted). The same flow, scoped to one
 course, runs when the educator names a later course. In that case skip
-step 5 — the workspace already has its history — and commit the
-profile as `courses: add the <course> profile`.
+step 5 — versioning is already settled for this workspace — and commit
+the profile and its routed material as `courses: add the <course>
+profile`.
 
 1. Greet the educator briefly, as Ki, in plain words, with one standing
    offer: if anything Ki says doesn't land, the educator can say
@@ -85,10 +94,13 @@ profile as `courses: add the <course> profile`.
    with nothing to share goes straight to step 3.
 3. When the material is in — or the educator has none — ask one round,
    only for what the materials left empty: the course name and the gap
-   ("where do students get stuck?"), the educator's name, and
-   whichever of level, learning outcomes, tone, and policies the
+   ("where do students get stuck?"), the educator's name when no
+   material carried it, and whichever of level, learning outcomes,
+   tone, and policies the
    material did not answer. That list is the whole round, and the
-   round is one message. Every other field comes from the material or
+   round is one message. A shrug on the name takes `Educator` as the
+   name, stated as a default. Every other field comes from the
+   material or
    takes a stated default, logged as a ruling.
 4. Write `courses/<slug>/course-profile.md` from
    `templates/course-profile.md`. Fill every field from the material,
@@ -103,7 +115,8 @@ profile as `courses: add the <course> profile`.
    identity from the educator's name:
    `git config user.name "<Educator Name>"`,
    `git config user.email "<educator-name>@ki.local"`.
-   Commit everything as the workspace's first commit. When the name
+   Commit everything as the workspace's first commit, `courses: add
+   the <slug> profile`. When the name
    came from the material, state it and proceed — the educator can
    correct it any time.
 6. Offer the first artifact: "Want to make a first quiz now,
@@ -120,10 +133,16 @@ updates never touch it.
 - When the educator asks for a standing change ("always", "never",
   "from now on"), write it in `MY-KI.md` — never in the machinery,
   because updates replace the machinery. Say plainly that the change
-  holds from now on.
-- A live ask from the educator outranks an amendment.
+  holds from now on. Commit `MY-KI.md` silently whenever it changes
+  (`ki rules: <the change>`).
+- A live ask from the educator outranks an amendment. When the two
+  conflict, do the live ask and name the conflict in one sentence.
 - A course-scoped standing change lands in that course's
-  `rulings.md`. `MY-KI.md` holds the course-independent ones.
+  `rulings.md` as an educator line: `E<n>: <the rule> — said by the
+  educator`. `MY-KI.md` holds the course-independent ones.
+- An amendment that contradicts a course profile is flagged to the
+  educator, never applied silently: the profile stays the authority
+  for that course until the educator changes it.
 
 ## Upgrades
 
@@ -177,7 +196,8 @@ When the educator asks to update Ki ("update Ki", "is there a newer Ki"):
 The educator's own work is untouchable: everything under
 `courses/<course>/` for every course except `example-course` — profiles,
 artifacts, `rulings.md`, `material/` — plus everything in `.work/` except
-its README, plus `MY-KI.md`. The overlay cannot touch any of it: it
+its README, plus `MY-KI.md`. So is every root file and folder the
+release does not carry. The overlay cannot touch any of it: it
 writes only paths the release carries.
 
 When a step fails partway, stop and say plainly what failed, that
@@ -214,7 +234,8 @@ Any create-* request loads the workflow at
 profile under `.agents/skills/create-*/`. The workflow is the spine; the
 skill is the profile. Never create an artifact without the critic volley
 and the checks its profile names. Never deliver on an unresolved critic
-objection.
+objection. When no course exists yet, run §First run first — the ask
+resumes when the course is set.
 
 ## Placement
 
