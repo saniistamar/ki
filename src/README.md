@@ -61,13 +61,16 @@ recovered — Ki will say so plainly.
 | Worksheet | `courses/<course>/worksheets/` |
 | Case study | `courses/<course>/case-studies/` |
 
-## Two things worth knowing
+## Three things worth knowing
 
 - Your source material — slides, notes, past materials — belongs in
   `courses/<course>/material/`. Attach files in chat or drop them into
   this folder, and Ki files them there, telling you where they went.
   Ki reads them for context and builds from what is there. Nothing of
   yours is ever changed inside that folder.
+- Ki talks with you in your language and writes your course material
+  in the course's language. English is the default for both — say the
+  word to change either.
 - `courses/example-course/` is a filled-in example you can browse or
   delete. Treat it as a read-only reference: updates replace it, so
   keep nothing of yours inside it. If you delete it and want it back

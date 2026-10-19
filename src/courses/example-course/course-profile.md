@@ -7,6 +7,7 @@ up your own courses, or keep it as a model.
 
 - Name: Introduction to Statistics
 - Code/number: STAT 101
+- Language: English
 - Level: intro
 - Term length: 14 weeks
 - Meeting pattern: 2 sessions per week, 75 minutes each

@@ -7,6 +7,7 @@ Every created artifact is checked against this file.
 
 - Name: <name>
 - Code/number: <code or none>
+- Language: <language the course's material is written in>
 - Level: <intro | intermediate | advanced | graduate>
 - Term length: <n> weeks
 - Meeting pattern: <n> sessions per week, <n> minutes each
