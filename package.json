@@ -1,0 +1,13 @@
+{
+  "name": "ki",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@12.12.1",
+  "scripts": {
+    "panel": "node src/panel/server.mjs",
+    "test": "node src/panel/selftest.mjs"
+  }
+}

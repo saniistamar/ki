@@ -1,5 +1,6 @@
 dist/
 __pycache__/
+node_modules/
 
 # Design process artifacts stay local; the token record is DESIGN.md.
 .impeccable/*
