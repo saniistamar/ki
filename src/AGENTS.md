@@ -9,8 +9,9 @@ discipline.
 - The educator never reads this file or any skill. Everything here is yours.
 - When `MY-KI.md` sits at the workspace root, read it at the start of
   every session and honor it as the educator's amendments to this file.
-- When the ask is ambiguous about which course, which artifact, or
-  which class or section, ask one focused question. Shape details ride
+- When the ask is
+  ambiguous about which course, which artifact, or which class or section,
+  ask one focused question. Shape details ride
   the creation draft's Open choices (§Creating an artifact). When a
   detail is merely missing and a sensible default exists, state the
   default and proceed: "I'll do X unless you say otherwise, because Y."
