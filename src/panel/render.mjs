@@ -63,8 +63,13 @@ export function validateAsk(ask) {
     const input = ask.input;
     if (input == null || typeof input !== "object") return "input missing";
     if (input.kind === "choice") {
-      if (!Array.isArray(input.choices) || !input.choices.length || !input.choices.every((c) => typeof c === "string"))
-        return "choice input needs an array of choices";
+      if (!Array.isArray(input.choices) || !input.choices.length || !input.choices.every((c) => typeof c === "string" && c.trim()))
+        return "choice input needs an array of non-empty choices";
+      if (
+        input.default != null &&
+        (!Number.isInteger(input.default) || input.default < 0 || input.default >= input.choices.length)
+      )
+        return "choice default index is out of range";
     } else if (input.kind !== "text") {
       return `input kind "${esc(String(input.kind))}" is not choice or text`;
     }
@@ -80,14 +85,22 @@ export function validateAsk(ask) {
       if (typeof d[key].value !== "string" || !d[key].value.trim())
         return `draft field "${key}" needs a value`;
     }
-    if ((typeof d.quantity.value !== "string" || !d.quantity.value.trim()) && !d.quantity.measure)
+    const isLine = (v) => typeof v === "string" && v.trim();
+    if (!isLine(d.quantity.value) && !isLine(d.quantity.measure))
       return 'draft field "quantity" needs a value or a measure';
-    if (!Array.isArray(d.open.choices) || !d.open.choices.length)
+    if (!Array.isArray(d.open.choices) || !d.open.choices.length || !d.open.choices.every((c) => typeof c === "string" && c.trim()))
       return "draft open choices missing";
+    if (
+      d.open.default != null &&
+      (!Number.isInteger(d.open.default) || d.open.default < 0 || d.open.default >= d.open.choices.length)
+    )
+      return "draft open default index is out of range";
   }
   if (ask.turn === "deliver") {
     if (typeof ask.title !== "string" || !ask.title.trim()) return "title missing";
     if (ask.attention != null && !Array.isArray(ask.attention)) return "attention must be an array";
+    if (ask.measure != null && (typeof ask.measure !== "string" || !ask.measure.trim()))
+      return "measure must be a line";
   }
   return null;
 }

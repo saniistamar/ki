@@ -5,8 +5,7 @@
 
 import { createServer } from "node:http";
 import { readFile, writeFile, rename, mkdir } from "node:fs/promises";
-import { watch as watchCb } from "node:fs";
-import { mkdtempSync } from "node:fs";
+import { watch as watchCb, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -27,14 +26,23 @@ if (!Number.isInteger(PORT) || PORT < 0 || PORT > 65535) {
   process.exit(1);
 }
 const DEMO = flag("demo");
-if (DEMO && !/^[\w-]+$/.test(DEMO)) {
+if (DEMO && !/^[a-z][\w-]*$/.test(DEMO)) {
   console.error(`No demo state "${DEMO}". Run with --demo <status|ask|intake|draft|deliver>.`);
   process.exit(1);
 }
-// Demo mode without an explicit --root stays out of any real workspace.
+// Demo mode without an explicit --root stays out of any real workspace,
+// and the throwaway folder is reaped when the server exits.
+const madeDemoRoot = Boolean(DEMO) && !flag("root");
 const ROOT = resolve(
   flag("root") ?? (DEMO ? mkdtempSync(join(tmpdir(), "ki-panel-")) : process.cwd())
 );
+if (madeDemoRoot) {
+  process.on("exit", () => {
+    try {
+      rmSync(ROOT, { recursive: true, force: true });
+    } catch {}
+  });
+}
 const panelDir = join(ROOT, ".ki", "panel");
 
 const readJson = async (p) => {
@@ -205,29 +213,45 @@ const server = createServer(async (req, res) => {
       });
       res.write("retry: 2000\n\n");
       let timer = null;
+      let alive = true;
       const bump = () => {
         clearTimeout(timer);
         timer = setTimeout(() => res.write("event: reload\ndata: now\n\n"), 60);
       };
+      // fs.watch on a missing path with recursive:true never throws on
+      // Linux — it arms and never fires. The workspace root always
+      // exists, so watching it catches the state folder's creation too.
+      const panelPrefix = `.ki${sep}panel${sep}`;
+      const isState = (f) => String(f ?? "").includes(panelPrefix) && /\.(json|css)$/.test(f);
       const watchers = [];
-      let armed = true;
-      try {
-        const w = watchCb(DEMO ? demoDir : panelDir, { recursive: true });
-        w.on("change", (event, file) => {
-          if (!file || /\.(json|css)$/.test(file)) bump();
-        });
-        watchers.push(w);
-      } catch {
-        // No state folder yet. End the stream: the browser's EventSource
-        // reconnects on its own, and the next connection re-arms the
-        // watcher once the folder exists.
-        armed = false;
-      }
-      if (!armed) {
+      const arm = (dir, filter) => {
+        try {
+          const w = watchCb(dir, { recursive: true });
+          w.on("change", (event, file) => {
+            if (alive && filter(String(file ?? ""))) bump();
+          });
+          w.on("error", () => {
+            // End the stream so EventSource reconnects and re-arms.
+            alive = false;
+            for (const x of watchers) x.close();
+            try {
+              res.end();
+            } catch {}
+          });
+          watchers.push(w);
+          return true;
+        } catch {
+          return false;
+        }
+      };
+      const okRoot = arm(ROOT, isState);
+      const okDemo = DEMO ? arm(demoDir, (f) => /\.(json|css)$/.test(f)) : true;
+      if (!okRoot && !okDemo) {
         res.end();
         return;
       }
       req.on("close", () => {
+        alive = false;
         clearTimeout(timer);
         for (const w of watchers) w.close();
       });

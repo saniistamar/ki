@@ -18,12 +18,14 @@ entry `pnpm check` runs the renderer self-test and the server's
 end-to-end check.
 
 The server binds `127.0.0.1` only, on port `4400`. Flags: `--port
-<n>`, `--root <path>` (default: the working directory), `--demo
-<state>` (serve one demo state from `panel/demo/`; without an
-explicit `--root` it writes its answers to a throwaway folder, never
-a real workspace). Nothing leaves the machine, and the server refuses
-requests that do not name it: the Host header must be this machine,
-and cross-origin posts to the answer route are turned away.
+<n>` (`0` picks a free port and the startup line names it), `--root
+<path>` (default: the working directory), `--demo <state>` (serve
+one demo state from `panel/demo/`; without an explicit `--root` it
+writes its answers to a throwaway folder that is removed when the
+server exits, never a real workspace). Nothing leaves the machine,
+and the server refuses requests that do not name it: the Host header
+must be this machine, and cross-origin posts to the answer route are
+turned away.
 
 ## The files
 
@@ -133,11 +135,13 @@ ask is named in the server output and served as idle.
 | Turn | Required |
 | --- | --- |
 | `status` | `lines`: an array of non-empty lines |
-| `ask`, `intake` | `question`; `input` with `kind` `choice` or `text`; a `choice` carries a non-empty `choices` array |
-| `draft` | `lead`; all five fields present; `coverage`, `structure`, `sample` carry a `value`; `quantity` carries a `value` or a `measure`; `open` carries a non-empty `choices` array |
-| `deliver` | `title`; `attention` is an array when present |
+| `ask`, `intake` | `question`; `input` with `kind` `choice` or `text`; a `choice` carries a non-empty `choices` array; a `default` index, when present, must name one of them |
+| `draft` | `lead`; all five fields present; `coverage`, `structure`, `sample` carry a `value`; `quantity` carries a `value` or a `measure`; `open` carries a non-empty `choices` array and an in-range `default` |
+| `deliver` | `title`; `attention` and `measure` are arrays and lines respectively when present |
 
-`course` is a plain line or `null`. `id` is always required.
+`course` is present in every ask — a plain line or `null`. `id` is
+always required. `measure` is always a line of text, never a bare
+number.
 
 ## `settled.json`
 
@@ -165,10 +169,11 @@ For `ask` and `intake` turns the field is `value` instead:
 While a matching answer is pending, the panel renders the recorded
 line — the answer's word, the open pick, the changes — and a quiet
 "Change the answer" link that reopens the form with the recorded
-values in place, not the defaults. A matching answer matches on `id`
-and `turn` both. A post that names a superseded ask, a word outside
-the vocabulary, or an empty send writes nothing: the live answer
-survives stale tabs.
+values in place: the open pick and the changes text. The yes/adjust
+verb is pressed again; the form cannot pre-choose a button. A
+matching answer matches on `id` and `turn` both. A post that names a
+superseded ask, a word outside the vocabulary, or an empty send
+writes nothing: the live answer survives stale tabs.
 
 ## The block protocol
 
