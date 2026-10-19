@@ -1,0 +1,78 @@
+/* Ki design system — tokens.
+   The world: an exercise book and the teacher's red margin.
+   Paper, ink, ruled lines, and a margin that carries the review.
+
+   The design lends four things, and only these: type, palette,
+   density, and the margin (the signature move). Layout, navigation
+   and controls stay the platform's own.
+
+   Ink protocol: ink is Ki's voice; red is the educator's and is spent
+   only on attention — a flag that needs their eye. Every coloured mark
+   is accompanied by a word, so colour never carries meaning alone.
+   Never set text in --ki-ink-3 or --ki-red-2: they are marks, not ink. */
+
+:root {
+  /* Paper */
+  --ki-paper: #f1f2ef;        /* the ground of both surfaces */
+  --ki-paper-2: #e8eae4;      /* a wash the page sets a block on */
+  --ki-paper-3: #dcded7;      /* the sheet's edge against a ground */
+
+  /* Ink */
+  --ki-ink: #20324f;          /* 11.5:1 on paper — Ki's voice */
+  --ki-ink-2: #55657e;        /* 5.2:1 on paper — labels, secondary */
+  --ki-ink-3: #9aa09b;        /* marks and rules only; never text */
+
+  /* The educator's red, reserved for attention */
+  --ki-red: #b8372e;          /* 5.2:1 on paper */
+  --ki-red-2: #dfb3ae;        /* the mark's soft stroke; never text */
+
+  /* Rules — the ruled page's furniture */
+  --ki-rule: #cfd3d5;         /* hairline, drawn from ink */
+  --ki-rule-2: #b2b8bf;       /* a rule that divides space */
+  --ki-rule-blue: #c3cdd8;    /* the margin rule, faintly blue like an exercise book */
+
+  /* Type — three voices, each with a job */
+  --ki-voice: "Source Serif 4", Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --ki-ui: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ki-typed: "Courier Prime", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --ki-text-xs: 0.75rem;      /* 12px — margin notes, flags */
+  --ki-text-sm: 0.8125rem;    /* 13px — labels, meta */
+  --ki-text-base: 1rem;       /* 16px */
+  --ki-text-voice: 1.0625rem; /* 17px — Ki's message, document body */
+  --ki-text-lg: 1.375rem;     /* 22px — section titles */
+  --ki-text-xl: 1.75rem;      /* 28px — document titles */
+  --ki-text-display: clamp(1.5rem, 1.15rem + 1.6vw, 2rem);
+
+  --ki-leading-tight: 1.2;    /* labels */
+  --ki-leading-voice: 1.5;    /* the panel */
+  --ki-leading-doc: 1.62;     /* documents read longer */
+
+  --ki-track-label: 0.09em;   /* small caps want air */
+
+  /* Space — one scale, both surfaces */
+  --ki-s1: 0.25rem;
+  --ki-s2: 0.5rem;
+  --ki-s3: 0.75rem;
+  --ki-s4: 1rem;
+  --ki-s5: 1.5rem;
+  --ki-s6: 2rem;
+  --ki-s7: 3rem;
+  --ki-s8: 4rem;
+
+  /* The page's own geometry */
+  --ki-panel-w: 27.5rem;      /* 440px — the panel's designed width */
+  --ki-panel-w-max: 35rem;    /* 560px — it breathes, it does not become a page */
+  --ki-margin-w: 6.5rem;      /* the annotation column */
+  --ki-margin-gap: 0.875rem;
+  --ki-measure: 68ch;         /* document body measure */
+  --ki-doc-w: 46rem;          /* the sheet */
+
+  /* Depth: offset plus soft blur, or nothing */
+  --ki-lift: 0 1px 1px rgb(0 0 0 / 5%), 0 8px 22px rgb(0 0 0 / 7%);
+
+  /* One authored moment: a mark lands on the page in two steps.
+     Paper has no easing. */
+  --ki-step: 140ms;
+  --ki-step-ease: steps(2, end);
+}

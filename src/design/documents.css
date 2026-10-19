@@ -1,0 +1,172 @@
+/* Ki design system — the document layer.
+   The artifacts Ki makes: quizzes, worksheets, handouts, assignments,
+   case studies. The same world as the panel, restrained: the documents
+   are the educator's, and they will restyle them.
+
+   The skeleton is fixed and English — the headings, the `Q1.` anchors,
+   the `Q1 —` answer-key labels, the header block — because
+   scripts/check.py reads it. Content follows the course language. */
+
+.ki-doc {
+  background: var(--ki-paper);
+  color: var(--ki-ink);
+  max-width: var(--ki-doc-w);
+  margin: 0 auto;
+  padding: var(--ki-s7) var(--ki-s6) var(--ki-s6);
+  font-size: var(--ki-text-voice);
+  line-height: var(--ki-leading-doc);
+}
+@media (max-width: 34rem) {
+  .ki-doc { padding: var(--ki-s5) var(--ki-s4) var(--ki-s5); }
+}
+
+/* ---- the header block --------------------------------------------------- */
+
+.ki-doc__head { padding-bottom: var(--ki-s4); border-bottom: 1px solid var(--ki-rule-2); }
+.ki-doc__title { font-size: var(--ki-text-xl); line-height: 1.25; margin-top: var(--ki-s2); max-width: 34ch; }
+.ki-doc__meta {
+  margin-top: var(--ki-s3);
+  font-family: var(--ki-ui);
+  font-size: var(--ki-text-sm);
+  line-height: 1.5;
+  color: var(--ki-ink-2);
+  max-width: var(--ki-measure);
+}
+.ki-doc__meta strong { color: var(--ki-ink); font-weight: 600; }
+
+.ki-doc__lede { margin-top: var(--ki-s4); max-width: var(--ki-measure); }
+
+/* ---- sections ----------------------------------------------------------- */
+
+.ki-sec { margin-top: var(--ki-s6); }
+.ki-sec__title { font-size: var(--ki-text-lg); line-height: 1.3; margin-bottom: var(--ki-s4); }
+
+/* ---- questions: the number hangs in the margin ------------------------- */
+
+.ki-q {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: var(--ki-s3);
+  margin-top: var(--ki-s5);
+  break-inside: avoid;
+}
+.ki-q__num {
+  font-family: var(--ki-typed);
+  font-size: var(--ki-text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--ki-ink-2);
+  text-align: right;
+  padding-top: 0.28em;
+}
+.ki-q__body { max-width: var(--ki-measure); }
+.ki-q__text { max-width: 62ch; }
+.ki-q__points {
+  font-family: var(--ki-typed);
+  font-size: var(--ki-text-xs);
+  color: var(--ki-ink-2);
+  white-space: nowrap;
+}
+
+/* ---- options ------------------------------------------------------------ */
+
+.ki-opts { list-style: none; margin: var(--ki-s3) 0 0; padding: 0; display: grid; gap: var(--ki-s2); }
+.ki-opt { display: grid; grid-template-columns: 1.35rem minmax(0, 1fr); gap: var(--ki-s1); }
+.ki-opt__key { font-family: var(--ki-typed); font-size: var(--ki-text-sm); color: var(--ki-ink-2); }
+
+/* ---- answer areas: ruled, like the book the students write in ----------- */
+
+.ki-answer { margin-top: var(--ki-s4); max-width: 62ch; }
+
+.ki-answer--line {
+  height: 1.6em;
+  border-bottom: 1px solid var(--ki-rule-2);
+  max-width: 26ch;
+}
+
+.ki-write-line { display: block; height: 2rem; border-bottom: 1px solid var(--ki-rule-2); }
+
+/* The embedded serif carries no italic; emphasis is weight, never a faux oblique. */
+.ki-doc em { font-style: normal; font-weight: 600; }
+
+/* ---- rubric ------------------------------------------------------------- */
+
+.ki-rubric { width: 100%; border-collapse: collapse; margin-top: var(--ki-s4); font-size: var(--ki-text-base); }
+.ki-rubric th, .ki-rubric td {
+  text-align: left;
+  vertical-align: top;
+  padding: var(--ki-s3) var(--ki-s3) var(--ki-s3) 0;
+  border-bottom: 1px solid var(--ki-rule);
+}
+.ki-rubric th {
+  font-family: var(--ki-ui);
+  font-size: var(--ki-text-sm);
+  font-weight: 600;
+  letter-spacing: var(--ki-track-label);
+  text-transform: uppercase;
+  color: var(--ki-ink-2);
+  border-bottom-color: var(--ki-rule-2);
+}
+.ki-rubric td:first-child { font-weight: 600; }
+
+/* ---- lists -------------------------------------------------------------- */
+
+.ki-p { max-width: var(--ki-measure); }
+.ki-p + .ki-p { margin-top: var(--ki-s3); }
+
+.ki-list { margin: var(--ki-s3) 0 0; padding-left: 1.1rem; display: grid; gap: var(--ki-s2); max-width: var(--ki-measure); }
+.ki-list--terms { list-style: none; padding-left: 0; }
+.ki-list--terms li { display: grid; grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr); gap: var(--ki-s3); }
+.ki-list--terms dt, .ki-term { font-weight: 600; }
+
+/* ---- the answer key ----------------------------------------------------- */
+
+.ki-key { border-top: 1px solid var(--ki-rule-2); padding-top: var(--ki-s5); }
+.ki-key__a { font-weight: 600; }
+.ki-src {
+  font-family: var(--ki-typed);
+  font-size: var(--ki-text-xs);
+  line-height: 1.5;
+  color: var(--ki-ink-2);
+  margin-top: var(--ki-s2);
+}
+.ki-rationale { margin-top: var(--ki-s2); color: var(--ki-ink); max-width: 66ch; }
+
+/* ---- instructor-only blocks -------------------------------------------- */
+
+.ki-note-block {
+  margin-top: var(--ki-s5);
+  padding: var(--ki-s4);
+  background: var(--ki-paper-2);
+  break-inside: avoid;
+}
+.ki-note-block .ki-doc__meta { margin-top: var(--ki-s2); }
+
+/* ---- the provenance footer --------------------------------------------- */
+
+.ki-doc__foot {
+  margin-top: var(--ki-s7);
+  padding-top: var(--ki-s3);
+  border-top: 1px solid var(--ki-rule-2);
+  font-family: var(--ki-typed);
+  font-size: var(--ki-text-xs);
+  line-height: 1.6;
+  color: var(--ki-ink-2);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--ki-s2) var(--ki-s4);
+}
+
+/* ---- print: the sheet on real paper ------------------------------------ */
+
+@page { margin: 16mm; }
+
+@media print {
+  :root { --ki-paper: #ffffff; --ki-paper-2: #f4f4f2; }
+  body { background: #ffffff; }
+  .ki-doc { max-width: none; padding: 0; }
+  .ki-artifact, .ki-note-block { box-shadow: none; }
+  .ki-spec, .ki-panel { display: none; }
+  .ki-rubric, .ki-q, .ki-key > .ki-q { break-inside: avoid; }
+  a { text-decoration: none; }
+}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reading a confidence interval · handout · STAT 101</title>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../ki.css">
+<link rel="stylesheet" href="../documents.css">
+</head>
+<body>
+
+<article class="ki-doc">
+
+  <header class="ki-doc__head">
+    <p class="ki-type-code">
+      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 2h6l3 3v7H3z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 2v3h3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      Handout
+    </p>
+    <h1 class="ki-doc__title">Reading a confidence interval</h1>
+    <p class="ki-doc__meta">
+      <strong>Introduction to Statistics</strong> · STAT 101 · Week 4 ·
+      Serves outcomes 2 and 4 · <span class="ki-num">2 pages</span>
+    </p>
+    <p class="ki-doc__lede">
+      An interval is a way of saying how much a number would move if you asked
+      a different sample. This page is what to check before you repeat one.
+    </p>
+  </header>
+
+  <section class="ki-sec">
+    <h2 class="ki-sec__title">What the number is doing</h2>
+    <p class="ki-p">
+      A sample mean is one draw. Ask a different 36 shops, a different 200
+      students, a different ten deliveries, and you get a different mean, not
+      because the world changed, but because samples vary. A confidence
+      interval draws the range that this wander would cover if you took the
+      sample again and again.
+    </p>
+    <p class="ki-p">
+      &ldquo;95% confident&rdquo; is short for: intervals built this way capture the true
+      value in 95% of samples. It is a statement about the method, not a
+      promise about this one interval, and not a range that holds 95% of the
+      data.
+    </p>
+  </section>
+
+  <section class="ki-sec">
+    <h2 class="ki-sec__title">Three sentences to try</h2>
+    <ol class="ki-list">
+      <li>"The average is plausibly between A and B.": always safe, and usually what the reporter meant.</li>
+      <li>"95% of the values fall between A and B.": rarely what an interval says; that is the spread of the data, not of the average.</li>
+      <li>"There is a 95% chance the true value is in this range.": the tempting one; the catch is that the interval has already been built, so the truth is either in it or not.</li>
+    </ol>
+  </section>
+
+  <section class="ki-sec">
+    <h2 class="ki-sec__title">What makes an interval narrow, and what that is worth</h2>
+    <ul class="ki-list">
+      <li>More observations: width follows the square root of the sample size, so four times the people halves it.</li>
+      <li>Less variation between the things you measured: tighter data, tighter interval.</li>
+      <li>A lower confidence level: 90% is narrower than 99%, and buys that width with less cover.</li>
+    </ul>
+    <p class="ki-p">
+      Before trusting a narrow interval, ask how it was built. A narrow interval
+      from a biased sample is a precise wrong answer.
+    </p>
+  </section>
+
+  <section class="ki-sec">
+    <h2 class="ki-sec__title">Key terms</h2>
+    <ul class="ki-list ki-list--terms">
+      <li><span class="ki-term">Confidence interval</span><span>a range built from a sample, meant to cover the true value in a stated share of samples.</span></li>
+      <li><span class="ki-term">Confidence level</span><span>how often the method covers the truth, not a chance for one interval.</span></li>
+      <li><span class="ki-term">Sample variability</span><span>how much a statistic moves from sample to sample; the thing the interval measures.</span></li>
+      <li><span class="ki-term">Margin of error</span><span>half the interval's width: the "±" a poll reports.</span></li>
+    </ul>
+  </section>
+
+  <section class="ki-sec">
+    <h2 class="ki-sec__title">Further reading</h2>
+    <ul class="ki-list">
+      <li>The week-3 slides, pages 4 to 9, the worked examples this page summarises.</li>
+      <li>Any poll report that prints its sample size and its margin of error; read the two together.</li>
+    </ul>
+  </section>
+
+  <footer class="ki-doc__foot">
+    <span>Built from the week-3 slides you shared.</span>
+    <span>Introduction to Statistics · Week 4 · Handout</span>
+  </footer>
+
+</article>
+
+</body>
+</html>

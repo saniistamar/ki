@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ki — the panel</title>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../ki.css">
+</head>
+<body class="ki-panel-page">
+
+<main class="ki-panel">
+
+  <header class="ki-context">
+    <p class="ki-context__where">Ki</p>
+    <p class="ki-context__when">Introduction to Statistics · <span class="ki-num">Week 4 · Quiz</span></p>
+  </header>
+
+  <ol class="ki-thread">
+
+    <!-- The status line: what Ki did with the material, in plain words. -->
+    <li class="ki-turn">
+      <p class="ki-status">
+        <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Your week-3 slides are filed with the course.
+      </p>
+    </li>
+
+    <!-- The ask -->
+    <li class="ki-turn ki-turn--you">
+      <p class="ki-who">You</p>
+      <p class="ki-said ki-said--asked" lang="en">Create a quiz for week 4 on confidence intervals — closed book, 25 minutes.</p>
+    </li>
+
+    <!-- Ki's draft, with the margin carrying the review -->
+    <li class="ki-turn">
+      <p class="ki-who">Ki</p>
+      <p class="ki-said">Here's the shape I'd write. Is it right?</p>
+
+      <section class="ki-draft" aria-label="Shape draft">
+
+        <div class="ki-row">
+          <div class="ki-row__body">
+            <p class="ki-label">Coverage</p>
+            <p class="ki-value">Confidence intervals — what they do and don't claim — aimed at the sampling-variability gap.</p>
+          </div>
+          <div class="ki-row__margin">
+            <svg class="ki-tick" width="12" height="12" viewBox="0 0 12 12" role="img"><title>Settled</title><path d="M1.5 6.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <p class="ki-note">from week-3 slides</p>
+          </div>
+        </div>
+
+        <div class="ki-row">
+          <div class="ki-row__body">
+            <p class="ki-label">Structure</p>
+            <p class="ki-value">Three blocks: 8 multiple choice, then 3 short answers, then one essay.</p>
+          </div>
+          <div class="ki-row__margin">
+            <svg class="ki-tick" width="12" height="12" viewBox="0 0 12 12" role="img"><title>Settled</title><path d="M1.5 6.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <p class="ki-note">ends on the essay</p>
+          </div>
+        </div>
+
+        <div class="ki-row">
+          <div class="ki-row__body">
+            <p class="ki-label">Quantity and mix</p>
+            <p class="ki-value"><span class="ki-num">12 questions · 30 points · 25 minutes.</span> Eight distractor sets name a real misconception.</p>
+          </div>
+          <div class="ki-row__margin">
+            <svg class="ki-tick" width="12" height="12" viewBox="0 0 12 12" role="img"><title>Settled</title><path d="M1.5 6.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="ki-row">
+          <div class="ki-row__body">
+            <p class="ki-label">One sample</p>
+            <p class="ki-value"><span class="ki-rough">rough</span>A hospital records the wait times of 36 patients; the mean is 18 minutes. Find the 95% confidence interval and say in one sentence what it claims.</p>
+          </div>
+          <div class="ki-row__margin">
+            <p class="ki-attn">
+              <svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M5 1v12M2 14h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <span>Your slides give the arithmetic, not the claim — check this.</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="ki-row">
+          <div class="ki-row__body">
+            <p class="ki-label" id="materials-label">Open choices</p>
+            <div class="ki-choice">
+              <select class="ki-select" aria-labelledby="materials-label">
+                <option>closed book, calculator allowed</option>
+                <option>closed book, no calculator</option>
+                <option>one page of notes allowed</option>
+              </select>
+              <span class="ki-default">default</span>
+            </div>
+          </div>
+          <div class="ki-row__margin">
+            <p class="ki-note">say the word to change it</p>
+          </div>
+        </div>
+
+      </section>
+
+      <div class="ki-actions">
+        <button class="ki-btn" type="button">Yes, write it</button>
+        <button class="ki-btn ki-btn--quiet" type="button">Adjust</button>
+      </div>
+    </li>
+
+    <!-- The educator's yes, with a polish directive -->
+    <li class="ki-turn ki-turn--you">
+      <p class="ki-who">You</p>
+      <p class="ki-said" lang="en">Yes — and make the last question harder.</p>
+    </li>
+
+    <!-- The delivery -->
+    <li class="ki-turn">
+      <p class="ki-who">Ki</p>
+      <p class="ki-said">Written to the shape you agreed. Week 4 quiz, ready for Tuesday.</p>
+
+      <article class="ki-artifact ki-arrive">
+        <header class="ki-artifact__head">
+          <p class="ki-type-code">
+            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3h10M2 7h10M2 11h6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Quiz
+          </p>
+          <h2 class="ki-artifact__title">Confidence intervals</h2>
+          <p class="ki-artifact__meta">Introduction to Statistics · STAT 101 · Week 4 · Serves outcomes 2 and 5 · <span class="ki-num">30 points · 25 minutes</span></p>
+        </header>
+        <div class="ki-artifact__body">
+          <p class="ki-checks">Checked for structure, points, and a source on every answer. Two reviewers read it from different angles — one checked what a beginner would trip on, one checked what the answers assume.</p>
+          <p class="ki-attn">
+            <svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M5 1v12M2 14h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <span>Two things need your eye: the bar for the last essay, and the answer marked unverified.</span>
+          </p>
+          <p class="ki-next">Next moves: <span>harder last question · a 20-minute version · a worksheet from the same slides</span></p>
+          <p><a href="quiz.html">Open the quiz</a></p>
+        </div>
+      </article>
+    </li>
+
+    <li class="ki-turn">
+      <p class="ki-status">
+        <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        The folder keeps its earlier state, so you can ask for this back.
+      </p>
+    </li>
+
+  </ol>
+
+</main>
+
+</body>
+</html>

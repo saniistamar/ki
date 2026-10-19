@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ki · the design system</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="ki.css">
+<link rel="stylesheet" href="documents.css">
+</head>
+<body>
+
+<main class="ki-spec">
+
+  <header class="ki-spec__block">
+    <p class="ki-type-code">Ki · design system</p>
+    <h1 class="ki-spec__heading">The exercise book and the teacher&rsquo;s red margin</h1>
+    <p class="ki-p">
+      Ki has one visual world and two surfaces. The panel is the narrow frame
+      where Ki talks with the educator; the documents are the artifacts Ki
+      makes. Both are paper: ink for Ki&rsquo;s voice, red for what needs the
+      educator&rsquo;s eye, and a margin that carries the review beside the
+      line it belongs to.
+    </p>
+    <p class="ki-p">
+      Every page in <code>pages/</code> carries the reference course&rsquo;s
+      content as demonstration material: Introduction to Statistics, week 4.
+      It is not a real course, and the numbers in it are illustrative.
+    </p>
+  </header>
+
+  <section class="ki-spec__block">
+    <h2 class="ki-spec__title">The world, in four parts</h2>
+    <div class="ki-spec__rows">
+      <div class="ki-spec__row">
+        <p class="ki-label">Paper</p>
+        <div class="ki-swatch">
+          <span class="ki-swatch__chip" style="background: #f1f2ef"></span>
+          <span><span class="ki-num">#f1f2ef</span>: the ground of both surfaces, cool rather than cream.</span>
+        </div>
+      </div>
+      <div class="ki-spec__row">
+        <p class="ki-label">Ink</p>
+        <div class="ki-swatch">
+          <span class="ki-swatch__chip" style="background: #20324f"></span>
+          <span><span class="ki-num">#20324f</span>: Ki&rsquo;s voice, 11.5:1 on paper. Secondary ink at <span class="ki-num">#55657e</span> carries labels at 5.2:1.</span>
+        </div>
+      </div>
+      <div class="ki-spec__row">
+        <p class="ki-label">Red</p>
+        <div class="ki-swatch">
+          <span class="ki-swatch__chip" style="background: #b8372e"></span>
+          <span><span class="ki-num">#b8372e</span>: the educator&rsquo;s, spent only on attention, always with words beside it.</span>
+        </div>
+      </div>
+      <div class="ki-spec__row">
+        <p class="ki-label">Rule</p>
+        <div class="ki-swatch">
+          <span class="ki-swatch__chip" style="background: #cfd3d5"></span>
+          <span><span class="ki-num">#cfd3d5</span> hairline, <span class="ki-num">#c3cdd8</span> for the margin line. Marks, never text.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ki-spec__block">
+    <h2 class="ki-spec__title">Three voices</h2>
+    <div class="ki-spec__rows">
+      <div class="ki-spec__row">
+        <p class="ki-label">Voice</p>
+        <div>
+          <p style="font-family: var(--ki-voice); font-size: var(--ki-text-voice); line-height: 1.5">Here&rsquo;s the shape I&rsquo;d write. Is it right?</p>
+          <p class="ki-note">Source Serif 4, for Ki&rsquo;s message and the documents&rsquo; body.</p>
+        </div>
+      </div>
+      <div class="ki-spec__row">
+        <p class="ki-label">Chrome</p>
+        <div>
+          <p style="font-family: var(--ki-ui); font-size: var(--ki-text-base); font-weight: 600">Coverage · Structure · Open choices</p>
+          <p class="ki-note">Public Sans, for labels, controls, metadata.</p>
+        </div>
+      </div>
+      <div class="ki-spec__row">
+        <p class="ki-label">Typed</p>
+        <div>
+          <p class="ki-typed" style="font-size: var(--ki-text-base)">from your week-3 slides · 12 questions · 30 points</p>
+          <p class="ki-note">Courier Prime, for the margin&rsquo;s typed notes and every measurement. Never body copy, never buttons.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ki-spec__block">
+    <h2 class="ki-spec__title">One owned mark per artifact type</h2>
+    <div class="ki-spec__grid">
+      <p class="ki-type-code"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3h10M2 7h10M2 11h6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg> Quiz</p>
+      <p class="ki-type-code"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 2.5h9v9h-9z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M5 7.4l1.6 1.6L9.4 5.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Worksheet</p>
+      <p class="ki-type-code"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 2h6l3 3v7H3z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 2v3h3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg> Handout</p>
+      <p class="ki-type-code"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M4.5 3H2v8h2.5M9 3h3M9 7h3M9 11h2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Assignment</p>
+      <p class="ki-type-code"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M4.5 3.5L2.5 7l2 3.5M9.5 3.5l2 3.5-2 3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Case study</p>
+    </div>
+  </section>
+
+  <section class="ki-spec__block">
+    <h2 class="ki-spec__title">The pages</h2>
+    <div class="ki-spec__rows">
+      <div class="ki-spec__row"><p class="ki-label">Panel</p><p><a href="pages/panel.html">The panel</a>: the conversation, a draft with its margin, the decision, the delivery.</p></div>
+      <div class="ki-spec__row"><p class="ki-label">Quiz</p><p><a href="pages/quiz.html">Confidence intervals</a>: questions, answer areas, and a key with a source on every answer.</p></div>
+      <div class="ki-spec__row"><p class="ki-label">Worksheet</p><p><a href="pages/worksheet.html">Sampling variability</a>: a scaffold from guided to alone, with ruled answer space.</p></div>
+      <div class="ki-spec__row"><p class="ki-label">Handout</p><p><a href="pages/handout.html">Reading a confidence interval</a>: prose, key terms, further reading.</p></div>
+      <div class="ki-spec__row"><p class="ki-label">Assignment</p><p><a href="pages/assignment.html">Is the difference real?</a>: steps, deliverables, a rubric.</p></div>
+      <div class="ki-spec__row"><p class="ki-label">Case study</p><p><a href="pages/case-study.html">The clinic&rsquo;s waiting-time claim</a>: a case, questions, and instructor-only notes.</p></div>
+    </div>
+  </section>
+
+  <section class="ki-spec__block">
+    <h2 class="ki-spec__title">States</h2>
+    <div class="ki-spec__grid">
+      <div>
+        <p class="ki-label">Decision</p>
+        <p style="margin-top: var(--ki-s3)"><button class="ki-btn" type="button">Yes, write it</button> <button class="ki-btn ki-btn--quiet" type="button">Adjust</button></p>
+      </div>
+      <div>
+        <p class="ki-label">Unavailable</p>
+        <p style="margin-top: var(--ki-s3)"><button class="ki-btn" type="button" disabled>Yes, write it</button> <button class="ki-btn ki-btn--quiet" type="button" disabled>Adjust</button></p>
+      </div>
+      <div>
+        <p class="ki-label">Choice</p>
+        <p style="margin-top: var(--ki-s3)"><select class="ki-select"><option>closed book, calculator allowed</option></select></p>
+      </div>
+      <div>
+        <p class="ki-label">Attention</p>
+        <p class="ki-attn" style="margin-top: var(--ki-s3)"><svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M5 1v12M2 14h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>One answer is unverified — check this one.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="ki-doc__foot">
+    <span>Ki design system · tokens.css, ki.css, documents.css, fonts/</span>
+    <span>Open Font License faces embedded; licences in <span class="ki-num">fonts/</span></span>
+  </footer>
+
+</main>
+
+</body>
+</html>
