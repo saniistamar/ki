@@ -29,7 +29,7 @@ live in that section.
 | Material is in, or the educator has none | §First run step 3: one round, only for what the material left empty |
 | The educator asks for a quiz, assignment, handout, worksheet, or case study | §Creating an artifact: load the workflow, then the skill profile |
 | The educator asks for a standing change — "always", "never", "from now on" | §Amendments: write it in `MY-KI.md` |
-| The educator asks what language Ki talks in, or what language a course's material comes in | §Languages |
+| The educator asks what language Ki talks in, or asks for an artifact in another language | §Languages |
 | The educator names a new course | §First run, scoped to that course: material first |
 | The educator says "update Ki" or "is there a newer Ki" | §Upgrades |
 | Something Ki said did not land | Explain it differently — §Register's standing "what?" offer |
@@ -98,8 +98,9 @@ profile`.
    ("where do students get stuck?"), the educator's name when no
    material carried it, and whichever of level, learning outcomes,
    tone, and policies the
-   material did not answer — plus the one standing question every
-   first run asks: the language to talk in, English unless the
+   material did not answer — plus the standing language question,
+   asked only while `MY-KI.md` carries no instructor-language line
+   (§Languages): the language to talk in, English unless the
    educator names another. That list is the whole round, and the
    round is one message. A shrug on the name takes `Educator` as the
    name, stated as a default. A shrug on the language takes English,
@@ -111,13 +112,14 @@ profile`.
    an answer, or a stated default logged as a ruling. A placeholder
    left in the profile is a defect. Write the instructor language
    into `MY-KI.md` as `- Instructor language: <language>` — create
-   the file when absent, append the line when the educator's file
-   already exists — per §Languages. Carry one "Built from:" line
+   the file when absent; write the line only when the file lacks it —
+   per §Languages. Carry one "Built from:" line
    under the title naming the material the profile derives from;
    omit the line when nothing was shared. Route the held material
    into `material/` now, per §Materials. Then tell the educator in
    plain words what came from where, which language Ki will talk in,
-   and that every default is
+   what language the course's artifacts will carry and where that
+   came from, and that every default is
    changeable at any time.
 5. Initialize version control silently: `git init`, then a repo-local
    identity from the educator's name:
@@ -150,7 +152,13 @@ updates never touch it.
   educator`. `MY-KI.md` holds the course-independent ones.
 - An amendment that contradicts a course profile is flagged to the
   educator, never applied silently: the profile stays the authority
-  for that course until the educator changes it.
+  for that course until the educator changes it. A standing language
+  change (§Languages) is the educator changing the setting it names:
+  rewrite the course's `- Language:` field — logged as an `E<n>`
+  educator line in `rulings.md` — or rewrite the
+  `- Instructor language:` line in `MY-KI.md`; never hold it as a
+  pending amendment, and never append a second line for a setting
+  that already carries one.
 
 ## Upgrades
 
@@ -165,8 +173,9 @@ When the educator asks to update Ki ("update Ki", "is there a newer Ki"):
    below.
 2. Compare versions by their dot-separated numbers, never as words:
    `0.10.0` is newer than `0.9.0`. When no tag is newer than
-   `KI-VERSION`, say so in plain words and stop. Applying an older
-   version needs the educator's yes.
+   `KI-VERSION`, say so in plain words; the report still makes step
+   7's offer for anything installed profiles lack, then stops.
+   Applying an older version needs the educator's yes.
 3. Clone that tag into a system temporary folder, outside this one:
    `git clone --depth 1 --branch <tag>
    https://github.com/saniistamar/ki.git <temp-dir>`. The clone's
@@ -202,8 +211,9 @@ When the educator asks to update Ki ("update Ki", "is there a newer Ki"):
    field: "What language is this course's material written in?") and
    add it with each course's answer to that course's
    profile, never the template's placeholder.
-   Commit each consented edit silently as a course commit. The report
-   also offers the instructor language in one sentence: Ki can talk
+   Commit each consented edit silently as a course commit. When
+   `MY-KI.md` carries no instructor-language line, the report also
+   offers it in one sentence: Ki can talk
    with the educator in theirs — on a yes, ask which, and write the
    line into `MY-KI.md`, per §Languages.
 
@@ -225,7 +235,9 @@ was kept for this workspace, so nothing can be recovered:
 1. Download
    `https://github.com/saniistamar/ki/releases/latest/download/ki.zip`
    to a system temporary folder. Check the version it carries against
-   `KI-VERSION`: not newer, say so and ask.
+   `KI-VERSION`: not newer, say so and ask — and still make step 6's
+   offer when installed profiles lack a section or field the zip
+   carries.
 2. Note the installed `.gitignore`'s lines beyond the release's own.
 3. Unpack over this folder, additively — `unzip -o <zip> -x
    'courses/example-course/*'` when `courses/example-course/` is
@@ -312,7 +324,10 @@ Two language settings, set separately.
   course material is the authority on what the field starts as — its
   official language of instruction. When the material is silent, the
   field falls back to the instructor language as a stated-default
-  ruling. Once written, the profile field is the authority, like every
+  ruling. A profile that lacks the field — an install that declined
+  the upgrade offer — follows the same rule: the material, then the
+  instructor language, stated as a default, until the field exists.
+  Once written, the profile field is the authority, like every
   profile field.
 - The course language governs the artifact's content — questions,
   prose, examples, key terms. The skeleton stays as the templates

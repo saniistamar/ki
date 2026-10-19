@@ -8,9 +8,12 @@ template, critic draw, checks, output folder. This file owns the order.
 - Restate the ask in one sentence: what artifact, for which course,
   covering what.
 - Read the course profile. Everything the profile decides — audience,
-  outcomes, tone, policies — is fixed. Flag conflicts to the educator
-  rather than bending silently. Aim the artifact at the profile's gap
-  section when the profile carries one.
+  outcomes, tone, language, policies — is fixed. Flag conflicts to the
+  educator rather than bending silently. Aim the artifact at the
+  profile's gap section when the profile carries one. The artifact's
+  content goes in the profile's course language; the template's
+  skeleton — section headings, numbering anchors, answer-key labels,
+  the header block — stays as the template carries it.
 - Every question costs the educator attention. Ask only when the answer
   would change the artifact; otherwise state the default and proceed.
 - Missing details that change the artifact's shape: ask them together, in

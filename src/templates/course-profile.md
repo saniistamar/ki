@@ -1,7 +1,7 @@
 # Course profile — <Course name>
 
-The authority on audience, outcomes, tone, and policies for this course.
-Every created artifact is checked against this file.
+The authority on audience, outcomes, tone, language, and policies for
+this course. Every created artifact is checked against this file.
 
 ## Course
 
