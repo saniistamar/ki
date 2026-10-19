@@ -25,9 +25,9 @@ file owns the order.
   instead if they would rather; the critic volley and the checks always
   run. The shape draft is the usable artifact that exists at any
   interruption.
-- A revision ask follows the same spine. One that changes coverage,
-  structure, or quantity drafts its change first, the same loop scoped
-  to the change. A cosmetic edit runs straight to §5.
+- A revision ask follows the same spine. One that changes
+  coverage, structure, or quantity drafts its change first, the same
+  loop scoped to the change. A cosmetic edit runs straight to §5.
 
 ## 2. Gather
 
