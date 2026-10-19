@@ -10,8 +10,9 @@ Two web surfaces:
 
 1. **The panel** — the primary frame. A local dev server renders the page;
    the educator reads it in a narrow side panel beside the editor in the
-   AI harness (ZCode first), about 400–520px wide. Longer term this panel
-   is Ki's default way to talk with the educator, replacing plain chat.
+   AI harness (ZCode first), about 400–520px wide. One-way: the panel
+   shows what Ki is doing and what it needs; the chat is where the
+   educator answers.
 2. **The artifact documents** — what Ki makes: quizzes, assignments,
    handouts, worksheets, case studies. Rendered as web pages, exported to
    PDF, slides, and other formats, and tunable by the educator.
@@ -27,10 +28,10 @@ and the design system must not depend on one.
 ## Users
 
 **The educator** — a teacher, lecturer, or trainer, not a programmer. The
-Ki folder is open in their AI harness; they ask in plain words and read the
-answer in the panel. Their job is to turn course material into usable
-teaching artifacts, fast, without learning a tool or reading any
-machinery.
+Ki folder is open in their AI harness; they ask in plain words in the
+chat and read what Ki shows in the panel. Their job is to turn course
+material into usable teaching, fast, without learning a tool or
+reading any machinery.
 
 **Students**, downstream — they receive the artifacts as documents and
 distributed copies. They never see the panel.
@@ -38,12 +39,13 @@ distributed copies. They never see the panel.
 ## Product Purpose
 
 Ki turns a plain folder into a teaching workspace. The educator shares
-material (syllabus, slides, past quizzes) and asks for an artifact in plain
-words; Ki drafts the shape, gets a yes, then writes the artifact —
-critic-reviewed from independent angles and structurally checked. The
-folder keeps its own history. Success is the educator holding a usable quiz
-they trust, minutes after asking, never having seen the system that made
-it.
+material (syllabus, slides, past quizzes) and asks in plain words; Ki
+files the material, reads the course from it, and answers — questions,
+findings, proposals — in words, shown in the panel and carried in the
+chat. The folder keeps its own history. Making the teaching documents
+(quizzes, assignments, handouts, worksheets, case studies) is switched
+off in this version: the machinery stays in the folder, nothing runs
+it, and Ki says so plainly when asked.
 
 ## Positioning
 
@@ -69,10 +71,12 @@ the educator's own folder stays the product, offline.
 
 ## Capabilities and Constraints
 
-- Creation is two-phase: a shape draft (coverage, structure, quantity, one
-  rough sample, open choices with defaults) shown for a yes, then polish
-  with the critic volley and the checks. The panel must render the draft
-  as something the educator can judge and answer in one gesture.
+- Creation is switched off in this version. The two-phase machinery — a
+  shape draft (coverage, structure, quantity, one rough sample, open
+  choices with defaults) shown for a yes, then polish with the critic
+  volley and the checks — stays in the folder, and nothing invokes it.
+  The panel renders read-only: no form, no button; the chat is the
+  answer channel.
 - Ki speaks in plain words, never machinery: no file paths, slugs, git,
   checks, or critic jargon on the panel. Delivery messages name what
   landed, what was checked (honestly), and what needs the educator's eye.
