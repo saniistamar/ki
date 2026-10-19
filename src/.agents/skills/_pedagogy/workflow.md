@@ -23,11 +23,13 @@ file owns the order.
   what you will do less of to honor it — fewer open choices, a tighter
   shape, a shorter artifact — and say the educator can move the deadline
   instead if they would rather; the critic volley and the checks always
-  run. The shape draft is the usable artifact that exists at any
-  interruption.
+  run. The shape draft is what exists at any interruption: something
+  concrete to react to, long before the full write.
 - A revision ask follows the same spine. One that changes
-  coverage, structure, or quantity drafts its change first, the same
-  loop scoped to the change. A cosmetic edit runs straight to §5.
+  coverage, structure, or quantity drafts its change first at
+  `.work/<artifact-slug>/change-draft.md`, the same loop scoped to
+  the change. A cosmetic edit runs straight to §5, which edits the
+  standing artifact.
 
 ## 2. Gather
 
@@ -39,27 +41,28 @@ file owns the order.
 ## 3. Draft the shape
 
 - Write the draft to `.work/<artifact-slug>/draft.md`. The slug is the
-  final file's stem (`week04-quiz`). The draft never lands at the final
-  path and never commits.
+  course and the final file's stem (`intro-statistics-week04-quiz`), so
+  two courses on one week never share a folder. The draft never lands
+  at the final path and never commits.
 - Every draft carries the same five fields:
   - **Coverage** — the topics or sections, each named with its source:
     the material file or the profile outcome.
   - **Structure** — the order and rough length.
   - **Quantity and mix** — the counts and the blend.
   - **One sample** — one instance written out, marked rough.
-  - **Open choices** — the two or three unset dials, each with a stated
-    default.
+  - **Open choices** — the unset dials, each with a stated default.
 - A draft may be rough, never wrong. A sample not grounded in the
   material carries a visible "?". The draft's prose follows the
   instructor language. The sample instance follows the course language.
   The field names are machinery and stay English.
 - The profile's Draft shape section names what each field carries for
   this artifact type.
-- Show the draft in chat, then make the shape ask (§4).
+- The shape ask (§4) shows the draft in chat.
 
 ## 4. The shape ask
 
-- One message, plain words: here is the shape — is it right?
+- One message, plain words, showing the draft: here is the shape — is
+  it right?
 - The educator's signal: yes, adjust, or wrong shape.
   - **Yes** — write the settled choices into the draft file: each Open
     choice collapses to the value the educator took. A yes that carries
@@ -76,23 +79,31 @@ file owns the order.
 
 ## 5. Polish
 
-- Write the artifact at its final path, from the affirmed draft file —
-  never from the chat. The profile names the folder and the
-  file-naming pattern: `<week-or-topic>-<artifact>.md` — e.g.
-  `week04-quiz.md`, `week07-case-study.md`.
+- First creation writes the artifact at its final path, from the
+  affirmed draft file — never from the chat. When the draft file is
+  gone at polish time, rebuild it from the conversation and say so.
+  The profile names the folder and the file-naming pattern:
+  `<week-or-topic>-<artifact>.md` — e.g. `week04-quiz.md`,
+  `week07-case-study.md`.
+- A revision edits the standing artifact at its final path. A
+  structural revision applies its affirmed change-draft to the
+  artifact in place, scoping the volley to the change; a cosmetic
+  edit just runs. The base is never a stale shape outline.
 - Fill every section the template and the profile's checks require. Leave
   nothing a check will flag. Leave no draft marker behind: no rough
-  flag, no "?" flag, no Open-choices block.
+  flag, no "?" flag, no Open-choices block. The checks do not detect
+  these — scan the artifact yourself before delivery.
 - Fire the profile's two critics as separate subagents (stance profile at
   `.agents/skills/_pedagogy/roster/<stance>.md`). Write the brief and the
   returns under `.work/<artifact-slug>/` — the artifact itself travels as
   a file path. The brief carries: the artifact's file path, the course
   profile path, the educator's ask verbatim — the affirmed draft's
-  directives included — and the stance profile path. Never your own
-  summary of the artifact — anchor is contamination. The critics review
-  quality within the shape the educator affirmed. An objection to the
-  shape itself is surfaced to the educator in the delivery message,
-  never silently reworked.
+  directives included — and the stance profile path. The draft itself
+  never travels in the brief. Never your own summary of the artifact —
+  anchor is contamination. Review quality
+  within the shape the educator affirmed: a return that objects to the
+  shape itself does not block — surface it to the educator in the
+  delivery message, never silently reworked.
 - A verdict of `objection` or `rework` blocks a finished handover. Fix and
   re-fire the same stance; two fix rounds maximum. After that, remaining
   objections go to the educator as named tradeoffs: the artifact commits

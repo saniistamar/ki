@@ -357,11 +357,12 @@ The stance profiles at `.agents/skills/_pedagogy/roster/` are reviewers
 with different concerns (the educator-facing name for critic stances). For
 every artifact, fire them as separate subagents, one stance each. The brief
 carries: the artifact's file path, the educator's ask verbatim, the stance
-profile path, the course profile path. Never your own
-summary of the artifact. Their verdicts gate delivery. The critics review
-quality within the shape the educator affirmed: an objection to the shape
-itself is surfaced to the educator in the delivery message, never
-silently reworked.
+profile path, the course profile path. The draft itself never travels
+in the brief. Never your own
+summary of the artifact. Their verdicts gate delivery. Review quality
+within the shape the educator affirmed: an objection to the shape
+itself does not block — it is surfaced to the educator in the delivery
+message, never silently reworked.
 
 - `objection` or `rework` blocks a finished handover. Fix and re-fire the
   same stance; two fix rounds maximum. After that, remaining objections
