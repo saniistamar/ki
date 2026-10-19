@@ -21,6 +21,22 @@ a named course.
   `.agents/skills/_pedagogy/roster/boundary-hunter.md`
 - Checks: `python3 scripts/check.py --type case-study <file>`
 
+## Draft shape
+
+- Coverage: the premise in two sentences — the domain, the tension, and
+  what makes it arguable from more than one direction — labeled as
+  drawn from material or constructed.
+- Structure: the session shape — the case length, the exhibits or data
+  artifacts, the question ladder from concrete to principled, and
+  discussion or written format.
+- Quantity and mix: the question count, the expected session time, and
+  in-class or take-home.
+- One sample: the premise paragraph and the first question, wording
+  rough. The premise is the flavor: the draft rides on it.
+- Open choices: the realism level (real names, anonymized, or
+  constructed), the data richness, and the student's role in the case
+  — each with its stated default.
+
 ## Notes
 
 - Name which course-profile outcomes the case study serves, in the header.

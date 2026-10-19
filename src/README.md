@@ -43,7 +43,7 @@ recovered — Ki will say so plainly.
 
 ## What happens under the hood (you never need to touch this)
 
-- Every draft is reviewed from independent angles with different
+- Every artifact is reviewed from independent angles with different
   concerns before it is marked done.
 - Structural checks run on every artifact.
 - Judgment calls Ki makes alone are written down in each
@@ -61,13 +61,17 @@ recovered — Ki will say so plainly.
 | Worksheet | `courses/<course>/worksheets/` |
 | Case study | `courses/<course>/case-studies/` |
 
-## Three things worth knowing
+## Four things worth knowing
 
 - Your source material — slides, notes, past materials — belongs in
   `courses/<course>/material/`. Attach files in chat or drop them into
   this folder, and Ki files them there, telling you where they went.
   Ki reads them for context and builds from what is there. Nothing of
   yours is ever changed inside that folder.
+- Every creation starts with a quick draft: the shape of the thing —
+  what it covers, how long, what mix — shown to you for a yes before
+  any polishing. Adjust as often as you like; say "just write it" to
+  skip it.
 - Ki talks with you in your language, and writes what it makes for
   your course — the quizzes, handouts, and the rest — in the course's
   language. English is the default for both — say the word to change

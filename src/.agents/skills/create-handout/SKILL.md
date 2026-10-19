@@ -21,14 +21,26 @@ course.
   `.agents/skills/_pedagogy/roster/boundary-hunter.md`
 - Checks: `python3 scripts/check.py --type handout <file>`
 
+## Draft shape
+
+- Coverage: the one topic explained, and the material sections it
+  summarizes.
+- Structure: the section outline, one line each on what a section
+  carries, and whether Key terms and Further reading ride along.
+- Quantity and mix: the target length in pages, the worked-example
+  count, and roughly how many key terms.
+- One sample: one key explanation or worked example, wording rough.
+  This is the register carrier: the plain-words tone gets tasted here.
+- Open choices: density (teaching walk-through or reference sheet) and
+  practice items or none — each with its stated default. When the
+  outline runs past two pages, name it as a choice: what to cut to fit,
+  or whether to run long.
+
 ## Notes
 
 - Name which course-profile outcomes the handout serves, in the header.
 - Every technical term is glossed at first use in plain words; the Key
   terms section collects them.
-- A handout is short. If the topic needs more than roughly two pages of
-  markdown, that is a decision for the educator: park it and say why in
-  the delivery message.
 - "With research": the deep-research workflow is reserved. Use
   `courses/<course>/material/` and say plainly when it runs out. Never pad
   with invented citations.

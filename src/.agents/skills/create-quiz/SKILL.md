@@ -21,6 +21,20 @@ course.
   `.agents/skills/_pedagogy/roster/novice-eyes.md`
 - Checks: `python3 scripts/check.py --type quiz <file>`
 
+## Draft shape
+
+- Coverage: the topics in order, each named with its source — the
+  material file or the profile outcome. Aim at the gap when the profile
+  carries one.
+- Structure: the block plan (for example: warm-up multiple choice, then
+  short answers, then one essay), with points per block.
+- Quantity and mix: the question count, the type blend, and how many
+  questions touch the gap.
+- One sample: one full stem with its options or answer line, wording
+  rough and marked rough.
+- Open choices: total points, time limit, and the exam-materials rule
+  (closed book, calculator allowed) — each with its stated default.
+
 ## Notes
 
 - Name which course-profile outcomes the quiz serves, in the header.
@@ -32,9 +46,6 @@ course.
   unverified answer is named as unverified, never padded.
 - Multiple-choice distractors are plausible: each one names a real
   misconception, never an absurd option.
-- Points and time limit: state the default aloud ("I'll set 20 minutes
-  unless you say otherwise, because the weekly quizzes in this course run
-  short") unless the educator fixed it in the profile or the ask.
 - "With research": the deep-research workflow is reserved. Use
   `courses/<course>/material/` and say plainly when it runs out. Never pad
   with invented citations.
