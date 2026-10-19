@@ -4,7 +4,7 @@
 
 Ki turns a folder into a teaching workspace. You ask in plain words —
 "set up a course called Intro Statistics", "create a quiz for week 4 on
-confidence intervals" — and an AI assistant writes the quiz,
+confidence intervals" — and Ki writes the quiz,
 assignment, handout, worksheet, or case study into the folder. Every
 draft is reviewed from independent angles and checked before it is
 marked done. The folder keeps its own history, so an earlier version of
@@ -34,16 +34,16 @@ others.
       this again.
    3. Unpack the zip into this folder, flat — its contents land here,
       not in a subfolder. Delete the downloaded zip afterwards.
-   4. Read AGENTS.md in this folder and follow its "First run"
-      section: greet me briefly and ask me the intake questions in
-      one round.
+   4. Read AGENTS.md in this folder and follow its "First run" section:
+      greet me briefly as Ki and ask me for my course materials.
 
    Speak to me in plain words. Never show me the machinery. If any step
    fails, tell me plainly what failed, that nothing broke, and how to
    try again.
    ```
 
-3. Answer the questions. That is the whole install.
+3. Share your materials and answer the few questions that follow.
+   That is the whole install.
 
 ## Install manually
 
@@ -56,11 +56,11 @@ others.
 
 If the download or the unzip fails, nothing is broken. Delete the
 partial folder and start again, or paste the install prompt below and
-let the assistant handle it.
+let Ki handle it.
 
 ## Keeping Ki current
 
-Ask "update Ki" in your AI tool whenever you like. The assistant checks for a
+Ask "update Ki" in your AI tool whenever you like. Ki checks for a
 newer release, updates the machinery, and leaves every course,
 material, and note you own untouched. Your own work lives in your
 course folders — profiles, artifacts, materials, judgment-call notes —
@@ -69,8 +69,11 @@ templates, and guides) is replaced on update: keep nothing of yours
 inside it. Each update is saved to the folder's history, so you can
 always ask for an earlier state back. If your copy of the folder was
 made without its hidden files, updates still work, but nothing can be
-recovered — the assistant will say so plainly. A failed update never
+recovered — Ki will say so plainly. A failed update never
 breaks anything: asking again completes it.
+
+Want Ki to work differently? Put it in `MY-KI.md` in your workspace
+folder — your own standing rules. Updates never touch it.
 
 ## Development
 
