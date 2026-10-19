@@ -40,8 +40,8 @@ file owns the order.
 
 ## 3. Draft the shape
 
-- Write the draft to `.work/<artifact-slug>/draft.md`. The slug is the
-  course and the final file's stem (`intro-statistics-week04-quiz`), so
+- Write the draft to `.work/<artifact-slug>/draft.md`. The slug is the course
+  and the final file's stem (`intro-statistics-week04-quiz`), so
   two courses on one week never share a folder. The draft never lands
   at the final path and never commits.
 - Every draft carries the same five fields:
