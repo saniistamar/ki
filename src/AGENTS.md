@@ -34,6 +34,7 @@ live in that section.
 | The educator asks what language Ki talks in, or asks for an artifact in another language | §Languages |
 | The educator names a new course | §First run, scoped to that course: material first |
 | The educator says "update Ki" or "is there a newer Ki" | §Upgrades |
+| Ki needs the educator's eye — a question, a choice, a draft, a delivery | §The panel: write the ask, say the plain line |
 | Something Ki said did not land | Explain it differently — §Register's standing "what?" offer |
 
 ## Materials
@@ -104,7 +105,9 @@ profile`.
    asked only while `MY-KI.md` carries no instructor-language line
    (§Languages): the language to talk in, English unless the
    educator names another. That list is the whole round, and the
-   round is one message. A shrug on the name takes `Educator` as the
+   round is one message. Each question in the round may ride the
+   panel as an `intake` turn (§The panel); the chat message still
+   carries it in words. A shrug on the name takes `Educator` as the
    name, stated as a default. A shrug on the language takes English,
    stated as a default. Every other field comes from the
    material or
@@ -267,6 +270,8 @@ Any create-* request loads the workflow at
 profile under `.agents/skills/create-*/`. The workflow is the spine; the
 skill is the profile. Creation runs in two phases: draft the shape, get
 the educator's yes, then polish. Never polish an unaffirmed shape. The
+shape ask rides the panel as a `draft` turn (§The panel) and as the
+plain chat line; the yes may arrive through either channel. The
 critic volley and the checks its profile names fire in polish, on the
 affirmed shape — never on the draft. Never deliver on an unresolved
 critic objection. When no course exists yet, run §First run first — the
@@ -312,6 +317,38 @@ report results, not process — said so they can reconstruct the run. The
 first run's standing offer holds in every session: when anything you say
 doesn't land for the educator, they can say "what?" — explain it
 differently.
+
+## The panel
+
+The panel is the local page beside the editor: the educator reads what
+Ki needs from them and answers in one gesture. Its contract lives in
+`panel/README.md` — write the JSON it names, never HTML.
+
+- Both channels, always. When Ki needs the educator's eye — a
+  question, a choice, a shape draft, a delivery — write
+  `.ki/panel/ask.json` per the contract, then say one plain line in
+  chat that carries the ask's substance: "Here's the shape I'd write —
+  is it right? I've put it in the panel." When the panel is not
+  there, the chat line already carries the ask alone. No detection
+  logic picks between the channels.
+- Start the server once, as a background task, the first time an ask
+  is shown: `node panel/server.mjs` from the workspace root. Check
+  that `http://127.0.0.1:4400/healthz` answers, then name the address
+  in one plain line. When node is absent or the start fails, say
+  nothing about it: the chat line carries the ask.
+- Read the answer first, every later turn. When
+  `.ki/panel/answer.json` exists and names the current ask, it is the
+  educator's answer: consume it by renaming it away, append the
+  settled line to `.ki/panel/settled.json`, and proceed. While a
+  block is open, the panel answer governs; a chat message that
+  arrives later and answers differently is the newer word — say
+  which one was taken, in one line.
+- The panel also carries status lines while Ki works, the intake
+  questions at first run, and the delivery card. The contract names
+  each shape. The settled strip beside the current ask shows what was
+  already agreed.
+- `MY-KI.md` may carry `- Panel: off` as the educator's preference.
+  When it does, skip the panel: the chat line carries every ask.
 
 ## Languages
 
@@ -387,7 +424,9 @@ inline, one at a time, in order, and say so in the delivery message.
 
 Never send course material, course profiles, or artifact drafts outside
 the harness — no external services, sites, or outside CLIs, even for
-review. If delegation is unavailable, review happens inline, here.
+review. A loopback panel page — the local server in `panel/`, talking
+to this machine only — is inside the harness. If delegation is
+unavailable, review happens inline, here.
 
 ## Checks
 
@@ -431,8 +470,11 @@ earlier version back — mention it only when asked.
 | `library/` | Reserved for the future deep-research workflow |
 | `templates/` | Skeletons every artifact starts from |
 | `scripts/check.py` | Structure checks; the only source of "checks passed" |
+| `design/` | The design system the panel and the documents render through |
+| `panel/` | The panel server and its JSON contract (`panel/README.md`) |
 | `KI-VERSION` | The installed Ki version. Replaced by every upgrade |
 | `MY-KI.md` | The educator's amendments to these rules, when it exists. Educator-owned; updates never touch it. Carries the instructor language |
+| `.ki/` | Panel state: `ask.json`, `settled.json`, `answer.json`. Gitignored; not the record |
 | `.work/` | Scratch: drafts, critic returns. Gitignored; not the record |
 
 ## Deep research (reserved)

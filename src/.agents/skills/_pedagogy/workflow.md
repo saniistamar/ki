@@ -62,16 +62,23 @@ file owns the order.
 ## 4. The shape ask
 
 - One message, plain words, showing the draft: here is the shape — is
-  it right?
-- The educator's signal: yes, adjust, or wrong shape.
+  it right? The same ask rides the panel as a `draft` turn written to
+  `.ki/panel/ask.json` (the contract in `panel/README.md`; §The panel
+  in the constitution). The chat message carries the draft's substance
+  whatever the panel does.
+- The educator's signal: yes, adjust, or wrong shape. It may arrive in
+  chat or as `.ki/panel/answer.json` — read the answer file first, and
+  when both arrive the later word governs (§The panel).
   - **Yes** — write the settled choices into the draft file: each Open
     choice collapses to the value the educator took. A yes that carries
-    quality words ("yes — and make them harder") rides as a named
-    polish directive in the draft file. Go to §5.
+    quality words ("yes — and make them harder") rides as a named polish
+    directive in the draft file. Go to §5.
   - **Adjust** — return the full revised draft with the changes named
     first, the same five fields, and overwrite the draft file. Adjusts
     are unlimited: the educator re-affirms a shape seen whole.
   - **Wrong shape** — re-draft.
+- Every settled gate appends one line to `.ki/panel/settled.json`:
+  what was decided, the educator's word, the time.
 - A live "just write it" skips this gate for the ask it answers, never
   the session. Say so and go to §5.
 - The draft aligns shape, not quality. Quality work happens once, in
@@ -137,6 +144,11 @@ file owns the order.
   polish — in `courses/<course>/rulings.md`.
 - Commit silently: `<area>: <subject>` in the imperative —
   `quizzes: add week 4 quiz on confidence intervals`.
+- Write the delivery card as a `deliver` turn to
+  `.ki/panel/ask.json` (the contract in `panel/README.md`): type,
+  title, the honest checks line, what needs the educator's eye, next
+  moves, and the artifact's path. Append the settled line for the
+  shape gate this delivery closed.
 - Tell the educator in plain words: what was made and where it landed,
   which outcomes it serves, what the reviewers said, what was checked
   (named honestly — real checks or "manual checks"), what needs their eye

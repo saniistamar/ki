@@ -2,7 +2,9 @@
 
 One visual world, two surfaces. The world is an exercise book and the
 teacher's red margin: paper, ink, ruled lines, and a margin that carries the
-review beside the line it belongs to.
+review beside the line it belongs to. Everything Ki shows the educator
+follows this world by default — inside the five artifact types and outside
+them.
 
 - **The panel** — Ki's conversation frame: narrow, conversation-first,
   screen-first.
@@ -38,9 +40,17 @@ on a document page.
   key labels `Q1 —`, and the header block are structure that
   `scripts/check.py` reads. Render them exactly; the content around them
   follows the course language.
-- **No network, no build step, no JavaScript.** The system is plain CSS and
-  static HTML, self-contained in the folder. Do not add a hosted font, a CDN,
-  or a script to make a page work.
+- **No network, no build step. The documents carry no script.** The system
+  is plain CSS and static HTML, self-contained in the folder. Do not add a
+  hosted font, a CDN, or a build dependency. The panel surface may carry
+  scripts and libraries that structure the work — the served panel page
+  adds one live-update listener, and the page works without it; a document
+  page never carries a script.
+- **The world is the default.** Whatever Ki hands the educator outside the
+  five artifact types — a lite data analysis, a custom app, a one-off page —
+  defaults to these tokens, voices, and marks. The five drawn type marks
+  stay with the five types; anything else renders under its own plain
+  label.
 - **Chrome is deleted where type can carry it.** No bubbles around messages,
   no card standing in for a label, no accent stripes. A rule or a margin
   note does the work.
