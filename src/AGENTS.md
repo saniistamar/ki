@@ -209,7 +209,9 @@ When the educator asks to update Ki ("update Ki", "is there a newer Ki"):
    courses are untouched. Never show the machinery. When the update
    crosses v0.6.0 (the installed version predates it), name the change
    in one sentence: Ki now shows a quick shape draft before polishing
-   anything, and "just write it" skips it. When the release
+   anything, and "just write it" skips it. When it crosses v0.7.0,
+   name this one too: Ki can now show its asks in a panel beside the
+   editor, and starts it when there is something to see. When the release
    adds a profile section or a profile field the educator's installed
    profiles lack, the
    report offers to add it: on the
@@ -253,8 +255,8 @@ was kept for this workspace, so nothing can be recovered:
 4. Append the noted `.gitignore` lines to the new file.
 5. When the release carries `KI-REMOVED`, delete exactly those paths,
    with the same educator-owned check as the git door.
-6. Report in plain words, carrying step 7's flow-change sentence when
-   the update crosses v0.6.0, and make the same consent-based offer of
+6. Report in plain words, carrying step 7's flow-change sentences when
+   the update crosses v0.6.0 or v0.7.0, and make the same consent-based offer of
    a section or field as step 7 of the git door, course by course. A
    consented edit
    in a workspace with no history is written and said plainly, not
