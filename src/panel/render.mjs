@@ -1,8 +1,11 @@
 // The panel renderer: JSON in, HTML string out. Pure — no file reads,
 // no server. The markup is the design system's panel vocabulary from
-// ../design/README.md, extended by one documented move: the actions and
-// controls sit inside a form that posts to /answer. The contract lives
-// in ./README.md.
+// ../design/README.md, extended by the serving layer's additions in
+// ./serve.css (the settled strip, the word-rendered choices). The panel
+// takes no input: no turn renders a form, an input, or a button — the
+// educator answers in the harness chat. The form-and-answer code below
+// stays in the file, switched off, and nothing calls it. The contract
+// lives in ./README.md.
 
 const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" };
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ESC[c]);
@@ -191,20 +194,26 @@ function askControl(input, pending) {
   return `<input class="ki-line" type="text" name="value" required placeholder="${esc(input.hint ?? "")}" value="${esc(pending?.value ?? "")}">`;
 }
 
-function askTurn(ask, pending, editable) {
+function askTurn(ask) {
   const parts = [`<p class="ki-who">Ki</p>`];
   if (ask.lead) parts.push(`<p class="ki-said">${esc(ask.lead)}</p>`);
   if (ask.progress) parts.push(statusLine(ask.progress));
   parts.push(`<p class="ki-said">${esc(ask.question)}</p>`);
-  if (pending && !editable) {
-    parts.push(`<p class="ki-said">Recorded — ${esc(pending.value ?? "")}.</p>`);
-    parts.push(`<a class="ki-btn ki-btn--quiet" href="/?edit">Change the answer</a>`);
-  } else {
-    const inner = `<div class="ki-ask">${askControl(ask.input ?? {}, pending)}</div><div class="ki-actions"><button class="ki-btn" type="submit">Send</button></div>`;
+  // The panel takes no input: the choices render as words and the
+  // educator answers in the harness chat. askControl's controls above
+  // stay defined, switched off.
+  const input = ask.input ?? {};
+  if (input.kind === "choice") {
+    const def = input.default ?? 0;
     parts.push(
-      `<form action="/answer" method="post">${hidden("id", ask.id)}${hidden("turn", ask.turn)}${inner}</form>`
+      `<ul class="ki-choices">${(input.choices ?? [])
+        .map((c, i) => `<li>${esc(c)}${i === def ? ' <span class="ki-default">default</span>' : ""}</li>`)
+        .join("")}</ul>`
     );
+  } else if (input.hint) {
+    parts.push(`<p class="ki-note">${esc(input.hint)}</p>`);
   }
+  parts.push(`<p class="ki-note">Answer in the chat.</p>`);
   return parts.join("");
 }
 
@@ -257,8 +266,8 @@ function settledStrip(settled) {
  * @param {object}      options { live = false, designPrefix = "/design", edit = false, pending = null }
  *   live          inject the live-update listener (the page works without it)
  *   designPrefix  where the design assets are served from
- *   edit          render the form even when a pending answer exists
- *   pending       the parsed answer.json, matched by the caller
+ *   edit          ignored — the input switch keeps it for API shape
+ *   pending       ignored — the input switch keeps it for API shape
  */
 export function renderPanel(ask, settled, options = {}) {
   const { live = false, designPrefix = "/design", edit = false, pending = null } = options;
@@ -273,14 +282,16 @@ export function renderPanel(ask, settled, options = {}) {
   if (!ask) {
     threadInner = `<li class="ki-turn">${statusLine("Nothing needs your eye right now.")}<p class="ki-said">Ask for something, and it will show up here.</p></li>`;
   } else {
-    const editable = !pending || edit;
+    // The input switch: the panel takes no answers, so every turn renders
+    // read-only. The edit and pending options stay accepted, ignored.
+    const editable = false;
     switch (ask.turn) {
       case "draft":
-        threadInner = `<li class="ki-turn">${draftTurn(ask, pending, editable)}</li>`;
+        threadInner = `<li class="ki-turn">${draftTurn(ask, null, editable)}</li>`;
         break;
       case "ask":
       case "intake":
-        threadInner = `<li class="ki-turn">${askTurn(ask, pending, editable)}</li>`;
+        threadInner = `<li class="ki-turn">${askTurn(ask)}</li>`;
         break;
       case "status":
         threadInner = `<li class="ki-turn">${statusTurn(ask)}</li>`;

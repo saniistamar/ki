@@ -2,6 +2,19 @@
    the design system, composed on its tokens. The system itself
    (../design/) is not touched. Served at /panel.css, after ki.css. */
 
+/* Choices as words: the panel takes no input, so an ask's options are
+   one quiet line each, the default marked. */
+.ki-choices {
+  list-style: none;
+  margin: var(--ki-s2) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--ki-s1);
+  font-family: var(--ki-ui);
+  font-size: var(--ki-text-sm);
+  color: var(--ki-ink);
+}
+
 /* The settled strip: one quiet line per decided ask, under the course. */
 .ki-settled {
   margin-top: var(--ki-s4);
@@ -24,7 +37,8 @@
   color: var(--ki-ink-2);
 }
 
-/* A turn's form holds its weight like any turn child. */
+/* A turn's form holds its weight like any turn child. Switched off with
+   the panel's input: no turn renders a form today. */
 .ki-panel form {
   display: grid;
   gap: var(--ki-s3);
@@ -34,7 +48,9 @@
   width: 100%;
 }
 
-/* Choice rows: the radio carries the ink, the words carry the choice. */
+/* Choice rows: the radio carries the ink, the words carry the choice.
+   Switched off with the panel's input; kept for the version that
+   carries panel input again. */
 .ki-choice--pick {
   cursor: pointer;
   font-family: var(--ki-ui);

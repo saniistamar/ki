@@ -1,6 +1,7 @@
-// The panel self-test: render every demo state plus the idle, recorded,
-// and live states, and assert the anchors the contract promises. Exits
-// nonzero on any miss. Run with: pnpm test
+// The panel self-test: render every demo state plus the idle and live
+// states, and assert the anchors the contract promises. The panel takes
+// no input, so every render must be free of forms, inputs, buttons, and
+// re-answer links. Exits nonzero on any miss. Run with: pnpm test
 
 import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -26,8 +27,10 @@ function absent(name, html, needles) {
   }
 }
 const always = ["<!DOCTYPE html>", 'class="ki-panel"', 'ki-context__where">Ki'];
+const noInput = ["<form", "<input", "<button", "/?edit"];
 
-// Every demo state renders, validates, carries the shell, no inline style, no script.
+// Every demo state renders, validates, carries the shell, no inline
+// style, no script, and — the input switch — no affordance anywhere.
 for (const f of readdirSync(demoDir)) {
   if (!f.endsWith(".json") || f.startsWith("_")) continue;
   const state = f.replace(/\.json$/, "");
@@ -38,6 +41,7 @@ for (const f of readdirSync(demoDir)) {
   check(state, html, always);
   absent(state, html, ["style=\""]);
   absent(state, html, ["<script"]);
+  absent(state, html, noInput);
 }
 
 // Validation names the malformed ask instead of rendering it calm.
@@ -46,7 +50,7 @@ if (validateAsk({ turn: "draft" }) === null) failures.push("validate: missing id
 if (validateAsk({ id: "x", turn: "draft", draft: { coverage: {} } }) === null)
   failures.push("validate: missing draft fields accepted");
 
-// Draft: five fields, the form, the id, the actions, the marks.
+// Draft: the five rows and their marks, read-only.
 {
   const html = renderPanel(demo("draft"), settled);
   check(
@@ -58,26 +62,20 @@ if (validateAsk({ id: "x", turn: "draft", draft: { coverage: {} } }) === null)
       "Quantity and mix",
       "One sample",
       "Open choices",
-      "<form",
-      'action="/answer"',
-      'method="post"',
-      'name="id" value="d-8f42"',
-      "Yes, write it",
-      "Adjust",
       "ki-draft",
       "ki-tick",
       "ki-rough",
       "from week-3 slides",
       "check this",
-      'name="open"',
-      "ki-default",
-      "What should change?",
+      '<span class="ki-num">12 questions · 30 points · 25 minutes</span>',
+      "closed book, calculator allowed",
     ]
   );
-  check("draft", html, ['<span class="ki-num">12 questions · 30 points · 25 minutes</span>']);
+  absent("draft", html, [...noInput, "What should change?", "Recorded", "ki-actions"]);
 }
 
-// Recorded draft: the ask retires, the change link stays, no form.
+// The pending and edit options are accepted and ignored: the same
+// read-only render whatever a stale caller passes.
 {
   const pending = {
     id: "d-8f42",
@@ -86,22 +84,15 @@ if (validateAsk({ id: "x", turn: "draft", draft: { coverage: {} } }) === null)
     open: "closed book, calculator allowed",
     changes: ["make the last question harder"],
   };
-  const html = renderPanel(demo("draft"), settled, { pending });
-  check(
-    "draft-recorded",
-    html,
-    [
-      "Recorded — Yes, write it · closed book, calculator allowed · make the last question harder.",
-      "Change the answer",
-      "ki-draft",
-    ]
-  );
-  absent("draft-recorded", html, ["<form"]);
+  const withPending = renderPanel(demo("draft"), settled, { pending });
+  absent("draft-pending", withPending, ["Recorded", "Change the answer", ...noInput]);
+  check("draft-pending", withPending, ["closed book, calculator allowed", "ki-draft"]);
   const editing = renderPanel(demo("draft"), settled, { pending, edit: true });
-  check("draft-edit", editing, ["<form", "Yes, write it", "<option selected>closed book, calculator allowed</option>"]);
+  absent("draft-edit", editing, [...noInput]);
+  check("draft-edit", editing, ["closed book, calculator allowed"]);
 }
 
-// Ask: the question, the choices, the default named, the send.
+// Ask: the question, the choices as words, the default named.
 {
   const html = renderPanel(demo("ask"), settled);
   check(
@@ -109,40 +100,25 @@ if (validateAsk({ id: "x", turn: "draft", draft: { coverage: {} } }) === null)
     html,
     [
       "Do students get a formula sheet",
-      'type="radio" name="value"',
-      'name="id" value="q-31c9"',
+      "ki-choices",
       "Yes — the sheet from week 2",
       "No — from memory",
       "default",
-      ">Send</button>",
+      "Answer in the chat.",
     ]
   );
-  const answered = renderPanel(demo("ask"), settled, {
-    pending: { id: "q-31c9", turn: "ask", value: "No — from memory" },
-  });
-  check("ask-recorded", answered, ["Recorded — No — from memory.", "Change the answer"]);
-  absent("ask-recorded", answered, ["<form"]);
-  const reasked = renderPanel(demo("ask"), settled, {
-    pending: { id: "q-31c9", turn: "ask", value: "No — from memory" },
-    edit: true,
-  });
-  check("ask-edit", reasked, ['value="No — from memory" checked', "<form"]);
+  absent("ask", html, ['type="radio"', ">Send</button>", "Recorded"]);
 }
 
-// Intake: progress line, text input, no course line yet.
+// Intake: progress line, the question, no course line yet, no input.
 {
   const html = renderPanel(demo("intake"), settled);
   check(
     "intake",
     html,
-    [
-      "Question 1 of 4",
-      "What are you teaching",
-      'type="text" name="value" required',
-      'name="id" value="i-0001"',
-      "Setting up your course",
-    ]
+    ["Question 1 of 4", "What are you teaching", "Setting up your course", "Answer in the chat."]
   );
+  absent("intake", html, ['type="text"', 'name="value"']);
 }
 
 // Status: plain lines, the dash mark.

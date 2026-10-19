@@ -1,7 +1,8 @@
 // Ki's panel server: zero-dependency, loopback-only. Serves the current
-// ask from the workspace's .ki/panel/ files (or a demo state), the design
-// system's assets, and the answer route that writes answer.json. The
-// contract is in ./README.md.
+// ask from the workspace's .ki/panel/ files (or a demo state) and the
+// design system's assets. The panel takes no input: every post to the
+// answer route is refused, and no answer file is written. The contract
+// is in ./README.md.
 
 import { createServer } from "node:http";
 import { readFile, writeFile, rename, mkdir } from "node:fs/promises";
@@ -78,6 +79,8 @@ const loadState = async () => {
   return { ask, settled: Array.isArray(settled) ? settled : [] };
 };
 
+// Switched off with the panel's input: nothing calls this while the
+// panel takes no answers. Kept for the version that carries input again.
 const loadPending = async (ask) => {
   const answer = await readJson(join(panelDir, "answer.json"));
   return answer && ask && answer.id === ask.id && answer.turn === ask.turn ? answer : null;
@@ -104,8 +107,8 @@ const NOSNIFF = { "x-content-type-options": "nosniff" };
 
 // The loopback bind is not the trust boundary by itself: a page the
 // educator browses can still address 127.0.0.1. Host must name this
-// machine (this kills DNS rebinding), and a cross-origin post to the
-// answer route is refused (a browser form post always carries Origin).
+// machine (this kills DNS rebinding); every post to the answer route is
+// refused whatever its Origin, because the panel takes no input.
 // boundPort follows an ephemeral --port 0 once the socket is live.
 let boundPort = PORT;
 const hostOk = (req) =>
@@ -171,13 +174,7 @@ const server = createServer(async (req, res) => {
 
     if (req.method === "GET" && (path === "/" || path === "/index.html")) {
       const { ask, settled } = await loadState();
-      const pending = await loadPending(ask);
-      const html = renderPanel(ask, settled, {
-        live: true,
-        designPrefix: "/design",
-        edit: url.searchParams.has("edit"),
-        pending,
-      });
+      const html = renderPanel(ask, settled, { live: true, designPrefix: "/design" });
       res.writeHead(200, {
         "content-type": "text/html; charset=utf-8",
         "cache-control": "no-cache",
@@ -259,6 +256,13 @@ const server = createServer(async (req, res) => {
     }
 
     if (req.method === "POST" && path === "/answer") {
+      // Switched off: the panel takes no input, so every post is refused
+      // here and no answer file is written. The original answer-writing
+      // body stays below the return, unreachable, for the version that
+      // carries panel input again.
+      res.writeHead(403, { "content-type": "text/plain", ...NOSNIFF });
+      res.end("refused");
+      return;
       if (!originOk(req)) {
         res.writeHead(403, { "content-type": "text/plain", ...NOSNIFF });
         res.end("refused");

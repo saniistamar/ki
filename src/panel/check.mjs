@@ -1,13 +1,11 @@
 // The panel's end-to-end check: boots the real server on a throwaway
 // root and an ephemeral port, then asserts the loop the contract
-// promises — health, rendering, assets, traversal refusal, host and
-// origin guards, crash-proof malformed URLs, the answer post with its
-// vocabulary, the recorded state, overwrite, stale-post protection,
-// consume, and the doc route. Exits nonzero on any miss. Run with:
-// pnpm check
+// promises — health, rendering, assets, traversal refusal, the host
+// guard, crash-proof malformed URLs, the refusal of every answer post,
+// and the doc route. Exits nonzero on any miss. Run with: pnpm check
 
 import { spawn } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, renameSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -25,7 +23,7 @@ const ok = (name, cond) => {
 
 const child = spawn(
   process.execPath,
-  [join(here, "server.mjs"), "--port", "0", "--root", root, "--demo", "draft"],
+  [join(here, "server.mjs"), "--port", "0", "--root", root, "--demo", "ask"],
   { stdio: ["ignore", "pipe", "pipe"] }
 );
 let serverLog = "";
@@ -94,12 +92,14 @@ const rawPost = (hostHeader, pathName, origin, body) =>
     req.end(body);
   });
 
-// Rendering and assets.
+// Rendering and assets. The panel takes no input: no form, no button,
+// no re-answer link reaches the page.
 {
   const page = await (await fetch(`${base}/`)).text();
-  ok("draft renders", page.includes("Coverage") && page.includes("Quantity and mix"));
-  ok("ask id travels", page.includes('name="id" value="d-8f42"'));
-  ok("actions present", page.includes("Yes, write it") && page.includes("Adjust"));
+  ok("ask renders", page.includes("Do students get a formula sheet") && page.includes("ki-choices"));
+  ok("choices are words", page.includes("Yes — the sheet from week 2") && page.includes("default"));
+  ok("the panel takes no input", !page.includes("<form") && !page.includes("<button") && !page.includes("/?edit"));
+  ok("the answer line shows", page.includes("Answer in the chat."));
   ok("listener rides", page.includes("/listen.js"));
   ok("settled strip", page.includes("ki-settled"));
 
@@ -119,17 +119,26 @@ const rawPost = (hostHeader, pathName, origin, body) =>
   ok("doc traversal refused", r2.status === 404);
 }
 
-// The host must name this machine; a cross-origin post is refused.
+// The host must name this machine; every post to the answer route is
+// refused, whatever its origin, and nothing is written.
 {
   const r = await rawGet("evil.example", "/");
   ok("foreign host refused", r.status === 403);
-  const p = await rawPost(
+  const p1 = await rawPost(
     `127.0.0.1:${port}`,
     "/answer",
     "http://evil.example",
-    "id=d-8f42&turn=draft&answer=yes"
+    "id=q-31c9&turn=ask&value=hmm"
   );
-  ok("cross-origin post refused", p.status === 403);
+  ok("cross-origin post refused", p1.status === 403);
+  const p2 = await rawPost(
+    `127.0.0.1:${port}`,
+    "/answer",
+    `http://127.0.0.1:${port}`,
+    "id=q-31c9&turn=ask&value=hmm"
+  );
+  ok("loopback post refused too", p2.status === 403);
+  ok("no answer file written", !existsSync(join(panelDir, "answer.json")));
 }
 
 // A malformed URL is answered, not fatal: the server stays up.
@@ -138,66 +147,6 @@ const rawPost = (hostHeader, pathName, origin, body) =>
   ok("malformed path answered", r.status === 400 || r.status === 404);
   const h = await fetch(`${base}/healthz`);
   ok("server survives malformed path", h.ok && (await h.text()) === "ok");
-}
-
-// The answer loop.
-{
-  const post = (body) =>
-    fetch(`${base}/answer`, {
-      method: "POST",
-      body,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      redirect: "manual",
-    });
-  const r = await post("id=d-8f42&turn=draft&answer=yes&open=closed+book,+calculator+allowed&changes=make+the+last+question+harder");
-  ok("answer posts with redirect", r.status === 303 && r.headers.get("location") === "/");
-
-  const answer = JSON.parse(readFileSync(join(panelDir, "answer.json"), "utf8"));
-  ok("answer file shape", answer.id === "d-8f42" && answer.answer === "yes");
-  ok("answer open carried", answer.open === "closed book, calculator allowed");
-  ok("answer changes carried", answer.changes.includes("make the last question harder"));
-
-  const page = await (await fetch(`${base}/`)).text();
-  ok(
-    "recorded line echoes the pick",
-    page.includes("Recorded — Yes, write it · closed book, calculator allowed")
-  );
-  ok("change link stays", page.includes("Change the answer"));
-  ok("form retired", !page.includes("<form"));
-
-  const edit = await (await fetch(`${base}/?edit`)).text();
-  ok("edit reopens with the pick", edit.includes("<form") && edit.includes("<option selected>closed book, calculator allowed</option>"));
-  ok("edit keeps the changes text", edit.includes(">make the last question harder</textarea>"));
-
-  // An empty answer is no answer: the ask stays open.
-  await post("id=d-8f42&turn=draft");
-  const stillOpen = await (await fetch(`${base}/`)).text();
-  ok("empty answer ignored", stillOpen.includes("Recorded — Yes, write it"));
-
-  // Words outside the vocabulary are no answer either.
-  await post("id=d-8f42&turn=draft&answer=banana&changes=junk");
-  const afterBanana = JSON.parse(readFileSync(join(panelDir, "answer.json"), "utf8"));
-  ok("vocabulary enforced", afterBanana.answer === "yes");
-
-  // A stale tab cannot clobber the live answer.
-  await post("id=zzz&turn=draft&answer=adjust&changes=clobber");
-  const afterStale = JSON.parse(readFileSync(join(panelDir, "answer.json"), "utf8"));
-  ok("stale post does not clobber", afterStale.id === "d-8f42" && afterStale.answer === "yes");
-
-  // A changed post overwrites.
-  await post("id=d-8f42&turn=draft&answer=adjust&changes=shorter+essay");
-  const changed = JSON.parse(readFileSync(join(panelDir, "answer.json"), "utf8"));
-  ok("overwrite works", changed.answer === "adjust");
-
-  // Consuming by rename reopens the ask.
-  renameSync(join(panelDir, "answer.json"), join(panelDir, "answer.consumed"));
-  const reopened = await (await fetch(`${base}/`)).text();
-  ok("consume reopens", reopened.includes("Yes, write it") && reopened.includes("<form"));
-
-  // A wrong-turn post does not retire the reopened ask.
-  await post("id=d-8f42&turn=ask&value=hmm");
-  const afterTurn = await (await fetch(`${base}/`)).text();
-  ok("wrong turn ignored", afterTurn.includes("<form"));
 }
 
 // The doc route serves workspace files as plain text.
