@@ -14,6 +14,8 @@ colors:
   rule: "#cfd3d5"
   rule-2: "#b2b8bf"
   rule-blue: "#c3cdd8"
+  paper-print: "#ffffff"
+  select-tint: "#cfd7e4"
 typography:
   voice:
     fontFamily: '"Source Serif 4", Georgia, "Iowan Old Style", "Times New Roman", serif'
@@ -153,6 +155,9 @@ is deferred and these tokens are where it lands.
   note blocks; the quiet button's hover fill.
 - **Sheet Edge** (#dcded7): the deeper ground the panel sheet sits on when
   the page frames it beside an editor.
+- **Print Ground** (#ffffff): the ground in print; an ink-light sheet.
+- **Selection Tint** (#cfd7e4): the text-selection wash, a browser surface
+  rather than a message colour.
 
 ### Rules and Marks
 
@@ -194,7 +199,7 @@ scripts beyond Latin fall back to the reader's system fonts.
 - **Voice body** (400, 17px, 1.5 in the panel; 1.62 in documents, measure
   capped at 68ch): Ki's messages, draft values (44ch), document body.
 - **Voice titles** (600): document titles 28px/1.25 (max 34ch), section and
-  artifact titles 22px/1.3, spec headings `clamp(1.5rem, 1.15rem + 1.6vw, 2rem)`.
+  artifact titles 22px/1.3; spec pages 28px and their sections 22px.
 - **Label** (600, 13px, 1.2, +0.09em, uppercase): field labels, rubric
   headers, the context line; turn markers (You / Ki) at 12px.
 - **Typed** (400, 12px): margin notes (1.35), attention lines (1.4), checks

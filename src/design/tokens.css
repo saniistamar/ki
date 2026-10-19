@@ -16,6 +16,7 @@
   --ki-paper: #f1f2ef;        /* the ground of both surfaces */
   --ki-paper-2: #e8eae4;      /* a wash the page sets a block on */
   --ki-paper-3: #dcded7;      /* the sheet's edge against a ground */
+  --ki-paper-print: #ffffff;  /* the print ground: an ink-light sheet */
 
   /* Ink */
   --ki-ink: #20324f;          /* 11.5:1 on paper — Ki's voice */
@@ -31,6 +32,9 @@
   --ki-rule-2: #b2b8bf;       /* a rule that divides space */
   --ki-rule-blue: #c3cdd8;    /* the margin rule, faintly blue like an exercise book */
 
+  /* Browser surfaces */
+  --ki-select-tint: #cfd7e4;  /* the text-selection wash */
+
   /* Type — three voices, each with a job */
   --ki-voice: "Source Serif 4", Georgia, "Iowan Old Style", "Times New Roman", serif;
   --ki-ui: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -42,7 +46,6 @@
   --ki-text-voice: 1.0625rem; /* 17px — Ki's message, document body */
   --ki-text-lg: 1.375rem;     /* 22px — section titles */
   --ki-text-xl: 1.75rem;      /* 28px — document titles */
-  --ki-text-display: clamp(1.5rem, 1.15rem + 1.6vw, 2rem);
 
   --ki-leading-tight: 1.2;    /* labels */
   --ki-leading-voice: 1.5;    /* the panel */
